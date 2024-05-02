@@ -1,6 +1,7 @@
 # osmiaCAM
 
 ## Install Raspberry Pi software
+Format SD card using [Raspberry Pi Imager] (https://www.raspberrypi.com/software/)
 
 ## Create folder in /mnt/ called OsmiaCam
 ## Put record.py into ~

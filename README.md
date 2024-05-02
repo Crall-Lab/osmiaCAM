@@ -15,7 +15,7 @@ rpicam-jpeg -o test.jpeg
 
 ## Clone this repository
 ```bash
-git clone http://www.github.com/Crall_Lab/OsmiaCam
+git clone https://github.com/Crall-Lab/osmiaCAM.git
 ```
 
 ## Create folder in /mnt/ called OsmiaCam

@@ -35,5 +35,11 @@ Then add the following lines to the bottom of the crontab file if they're not th
 ```
 *NB if you want to use the camera (e.g, for preview, check focus, or to troubleshoot record.py script), turn off autoamted recording by commenting out that last line
 
+## Check mounting location of external hard drive
+run the following in terminal:
+```bash
+sudo fdisk -l
+```
+This will list mounted drives, and look for /dev/sda1 in last line
 ## recording
 Python script will create 9 min 45 s video every 10 min

@@ -19,7 +19,7 @@ git clone https://github.com/Crall-Lab/osmiaCAM.git
 ```
 
 ## Create folder in /mnt/ called OsmiaCam
-## Put record.py into ~
+ Put record.py into home directory ('~')
 
 ## Add three lines to the crontab
 Get permissions: @reboot sudo systemctl daemon-reload

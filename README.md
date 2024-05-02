@@ -22,10 +22,9 @@ git clone https://github.com/Crall-Lab/osmiaCAM.git
  Put record.py into home directory ('~')
 
 ## Add three lines to the crontab
-Get permissions: @reboot sudo systemctl daemon-reload
-
-mount directory@ @rebootsudo mount /dev/sda1 /mnt/OsmiaCam -o umask=000
-
+Get permissions and mount directory for external hard drive
+@reboot sudo systemctl daemon-reload
+@reboot sudo mount /dev/sda1 /mnt/OsmiaCam -o umask=000
 run python script: */10 * * * * /usr/bin/python record.py
 
 ## recording

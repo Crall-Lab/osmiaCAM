@@ -3,6 +3,21 @@
 ## Install Raspberry Pi software
 Format SD card using [Raspberry Pi Imager](https://www.raspberrypi.com/software/)
 
+## Preview camera (to test focus, framing, etc)
+```bash
+rpicam-hello -t 0
+```
+
+## Take a single full resolution photo
+```bash
+rpicam-jpeg -o test.jpeg
+```
+
+## Clone this repository
+```bash
+git clone http://www.github.com/Crall_Lab/OsmiaCam
+```
+
 ## Create folder in /mnt/ called OsmiaCam
 ## Put record.py into ~
 

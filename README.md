@@ -31,7 +31,7 @@ Then add the following lines to the bottom of the crontab file if they're not th
 ```bash
 @reboot sudo systemctl daemon-reload
 @reboot sudo mount /dev/sda1 /mnt/OsmiaCam -o umask=000
-run python script: */10 * * * * /usr/bin/python record.py
+*/10 * * * * /usr/bin/python record.py
 ```
 
 ## recording

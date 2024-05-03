@@ -19,7 +19,12 @@ git clone https://github.com/Crall-Lab/osmiaCAM.git
 ```
 
 ## Create folder in /mnt/ called OsmiaCam
- Put record.py into home directory ('~')
+Put record.py into home directory ('~')
+
+## Make moount directory
+```bash
+sudo mkdir /mnt/OsmiaCam
+```
 
 ## Add three lines to the crontab
 Open up crontab with the following command:

@@ -42,5 +42,7 @@ def play_video(video_path):
     cv2.destroyAllWindows()
 
 # Replace 'video_path' with the path to your h264 video file
-video_path = '/Users/jamescrall/Downloads/2024-05-05_23-40-01 (1).h264'
+#video_path = '/Users/jamescrall/Downloads/2024-05-05_23-40-01 (1).h264'
+#video_path = '/Volumes/Untitled/2024-09-14/bumblebox-01_2024-09-14_13_10_06.mjpeg'
+video_path = input("Enter the file path: ")
 play_video(video_path)

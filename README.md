@@ -19,7 +19,7 @@ git clone https://github.com/Crall-Lab/osmiaCAM.git
 ```
 
 ## Create folder in /mnt/ called OsmiaCam
-Put record.py into home directory ('~')
+Put dayShift0.py, dayShift1.py, nightShift1.py into home directory ('~').
 
 ## Make moount directory
 ```bash
@@ -36,7 +36,10 @@ Then add the following lines to the bottom of the crontab file if they're not th
 ```bash
 @reboot sudo systemctl daemon-reload
 @reboot sudo mount /dev/sda1 /mnt/OsmiaCam -o umask=000
-*/10 * * * * /usr/bin/python record.py
+*/10 * * * * /usr/bin/python dayShift1.py
+*/3 * * * * /usr/bin/python dayShift0.py
+@reboot sudo /usr/bin/python nightShift1.py
+0 22 * * * sudo /usr/bin/python nightShift1.py
 ```
 *NB if you want to use the camera (e.g, for preview, check focus, or to troubleshoot record.py script), turn off autoamted recording by commenting out that last line
 

@@ -60,6 +60,8 @@ run the following in terminal:
 ```bash
 sudo fdisk -l
 ```
-This will list mounted drives, and look for /dev/sda1 in last line
-## recording
-Python script will create 9 min 45 s video every 10 min of outside, 10s video of nest every 3 minutes during the day and every hour at night.
+This will list mounted drives, and look for /dev/sda1 in last line.
+Hard drives must be mounted at sda1. Do not connect other hard drives to pi.
+
+## Testing
+Restart and come back after 2 hours to check if expected files are in expected locations on hard drive. OsmiaCam should be created, with nestCam and ExtCam within. Each day will have each own folder within that. osmiaCAM will create 9 min 45 s video every 10 min of outside, 10s video of nest every 3 minutes during the day and every hour at night.

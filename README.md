@@ -17,7 +17,7 @@ rpicam-jpeg -o test.jpeg
 * Note: Requires access with internet
 1. Connect RTC battery to slot labelled 'BAT'
 2. check that clock is working with sudo hwclock -r
-3. Run this: ```sudo hwclock —systohc```
+3. Run this: ```sudo hwclock —-systohc```
 4. Edit configurations: ```sudo -E rpi-eeprom-config --edit```, adding the two lines:
    ```
    POWER_OFF_ON_HALT = 1

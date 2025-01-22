@@ -12,7 +12,7 @@ if not(5 <= int(datetime.now().strftime('%H')) <= 20):
 	main = '/mnt/OsmiaCam/OsmiaVids'
 	if not os.path.exists(main):
 		os.mkdir(main)
-	parent = '/mnt/OsmiaCam/OsmiaVids/extCam'
+	parent = '/mnt/OsmiaCam/OsmiaVids/nestCam'
 	if not os.path.exists(parent):
 		os.mkdir(parent)
 	date = datetime.now().strftime("%D").replace('/', '_')
@@ -34,7 +34,7 @@ if not(5 <= int(datetime.now().strftime('%H')) <= 20):
 	now = datetime.now()
 	filename = str(now).split('.')[0].replace(' ', '_').replace(':', '-')+'_0.mp44'
 
-	subprocess.Popen(['rpicam-vid', '--camera', '0','-t', '10000', '-o', 'night0.h264'])
+	subprocess.Popen(['rpicam-vid', '--camera', '0', '-t', '10000', '--width', '6000', '--height', '2000', '-o', 'night0.h264'])
 	
 
 	time.sleep(12)

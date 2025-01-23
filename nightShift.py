@@ -32,7 +32,7 @@ if not(5 <= int(datetime.now().strftime('%H')) <= 20):
 	time.sleep(1)
 
 	now = datetime.now()
-	filename = str(now).split('.')[0].replace(' ', '_').replace(':', '-')+'_0.mp44'
+	filename = str(now).split('.')[0].replace(' ', '_').replace(':', '-')+'_0.mp4'
 
 	subprocess.Popen(['rpicam-vid', '--camera', '0', '-t', '10000', '--width', '6000', '--height', '2000', '-o', 'night0.h264'])
 	

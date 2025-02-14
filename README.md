@@ -3,6 +3,10 @@
 ## Install Raspberry Pi software
 Format SD card using [Raspberry Pi Imager](https://www.raspberrypi.com/software/)
 
+## Connecting cameras
+The nest camera should be connected as camera 0 and the external camera should be camera 1. The positions are indicated by CAM/DISP 0 and CAM/DISP 1 on the board of the raspberry pi:
+![Camera connections](guideImages/camera.jpg)
+
 ## Preview camera (to test focus, framing, etc)
 ```bash
 rpicam-hello -t 0
@@ -62,6 +66,17 @@ sudo fdisk -l
 ```
 This will list mounted drives, and look for /dev/sda1 in last line.
 Hard drives must be mounted at sda1. Do not connect other hard drives to pi.
+
+## Lighting
+In order to use the relay module to control the lights automatically, the raspberry pi, relay, and lights must be connected like so:
+![](guideImages/lightsOverview.jpg)
+The two wires coming from the relay can then be plugged into the lights and battery in any configuration.
+
+The images below illustrate pin/wire locations on the raspberry pi and relay module.
+
+![Wire locations on raspberry pi](guideImages/lightsPi2Relay.jpg)
+![Wire locations on relay connecting relay to raspberry pi](guideImages/lightsOverview.jpg)
+![Wire locations on relay connecting relay to lights and power](guideImages/lightsOverview.jpg)
 
 ## Testing
 Restart and come back after 2 hours to check if expected files are in expected locations on hard drive. OsmiaCam should be created, with nestCam and ExtCam within. Each day will have each own folder within that. osmiaCAM will create 9 min 45 s video every 10 min of outside, 10s video of nest every 3 minutes during the day and every hour at night.

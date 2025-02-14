@@ -75,8 +75,9 @@ The two wires coming from the relay can then be plugged into the lights and batt
 The images below illustrate pin/wire locations on the raspberry pi and relay module.
 
 ![Wire locations on raspberry pi](guideImages/lightsPi2Relay.jpg)
-![Wire locations on relay connecting relay to raspberry pi](guideImages/lightsOverview.jpg)
-![Wire locations on relay connecting relay to lights and power](guideImages/lightsOverview.jpg)
+![Wire locations on relay connecting relay to raspberry pi](guideImages/lightsRelay2Pi.jpg)
+![Wire locations on relay connecting relay to lights and power](guideImages/lightsRelay2Lights.jpg)
+* Note that the black ends should be soldered together.
 
 ## Testing
 Restart and come back after 2 hours to check if expected files are in expected locations on hard drive. OsmiaCam should be created, with nestCam and ExtCam within. Each day will have each own folder within that. osmiaCAM will create 9 min 45 s video every 10 min of outside, 10s video of nest every 3 minutes during the day and every hour at night.

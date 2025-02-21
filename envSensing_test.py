@@ -25,7 +25,7 @@ outer_meas = "," + "%.2f" % outer.pressure + "," + "%.2f" % outer.temperature + 
 print(ds+outer_meas)
 #Write measurements
 with open("/home/sicb_pi/envLogger.csv", "a") as f:
-				f.write(ds+outer_meas)
+				f.write(ds+outer_meas + '\n')
 print("Data recorded!")
 
     #Wait for a minute before taking another measurement

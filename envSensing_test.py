@@ -17,17 +17,16 @@ from time import sleep
 #inner = adafruit_ahtx0.AHTx0(board.I2C())
 outer = MS8607(board.I2C())
 
-while True:
-    t = datetime.datetime.now()
-    ds = t.strftime("%Y-%m-%d %H:%M:%S")
-    outer_meas = "," + "%.2f" % outer.pressure + "," + "%.2f" % outer.temperature + "," + "%.2f" % outer.relative_humidity
-    #inner_meas = "," + "%.2f" % inner.temperature + "," + "%.2f" % inner.relative_humidity + "\n"
-    #print(ds+ms8607_meas+inner_meas)
-    print(ds+outer_meas)
-    #Write measurements
-    with open("/home/sicb_pi/envLogger.csv", "a") as f:
-					f.write(ds+outer_meas)
-    print("Data recorded!")
-    
+t = datetime.datetime.now()
+ds = t.strftime("%Y-%m-%d %H:%M:%S")
+outer_meas = "," + "%.2f" % outer.pressure + "," + "%.2f" % outer.temperature + "," + "%.2f" % outer.relative_humidity
+#inner_meas = "," + "%.2f" % inner.temperature + "," + "%.2f" % inner.relative_humidity + "\n"
+#print(ds+ms8607_meas+inner_meas)
+print(ds+outer_meas)
+#Write measurements
+with open("/home/sicb_pi/envLogger.csv", "a") as f:
+				f.write(ds+outer_meas)
+print("Data recorded!")
+
     #Wait for a minute before taking another measurement
     #sleep(59)

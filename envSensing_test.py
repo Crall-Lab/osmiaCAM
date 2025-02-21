@@ -20,12 +20,12 @@ outer = MS8607(board.I2C())
 while True:
     t = datetime.datetime.now()
     ds = t.strftime("%Y-%m-%d %H:%M:%S")
-    outer_meas = "," + "%.2f" % outer.pressure + "," + "%.2f" % outer.temperature + "," + "%.2f" % atm.relative_humidity
+    outer_meas = "," + "%.2f" % outer.pressure + "," + "%.2f" % outer.temperature + "," + "%.2f" % outer.relative_humidity
     #inner_meas = "," + "%.2f" % inner.temperature + "," + "%.2f" % inner.relative_humidity + "\n"
     #print(ds+ms8607_meas+inner_meas)
     print(ds+outer_meas+inner_meas)
     #Write measurements
-    with open("/mnt/bumblebox/data/envLogger.csv", "a") as f:
+    with open("/home/sicb_pi/envLogger.csv", "a") as f:
 					f.write(ds+outer_meas)
     print("Data recorded!")
     

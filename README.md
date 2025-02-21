@@ -42,6 +42,18 @@ Put dayShift0.py, dayShift1.py, nightShift1.py into home directory ('~').
 sudo mkdir /mnt/OsmiaCam
 ```
 
+## Install libraries for environmental sensors
+```bash
+sudo pip3 install --break-system-packages adafruit-blinka
+sudo pip3 install --break-system-packages adafruit-circuitpython-ms8607
+sudo pip3 install --break-system-packages adafruit-circuitpython-ahtx0
+```
+
+Now it's good to reboot:
+```bash
+sudo reboot -h now
+```
+
 ## Add lines to the crontab
 Open up crontab with the following command:
 ```bash

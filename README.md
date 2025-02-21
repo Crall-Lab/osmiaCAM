@@ -61,6 +61,8 @@ crontab -e
 ```
 Then add the following lines to the bottom of the crontab file if they're not there already (to get permissions and mount directory for external hard drive)
 
+TODO: deal with path names (e.g., add 'HOME=/home/sicb_pi' to top of crontab, and reference everything to '~/osmiaCam'?)
+
 ```bash
 @reboot sudo systemctl daemon-reload
 @reboot sudo mount /dev/sda1 /mnt/OsmiaCam -o umask=000

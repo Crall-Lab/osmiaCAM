@@ -15,7 +15,8 @@ if 5 <= int(datetime.now().strftime('%H')) <= 20:
 		os.mkdir(outDir)
 
 	now = datetime.now()
-	filename = str(now).split('.')[0].replace(' ', '_').replace(':', '-')+'_1.mp4'
+	filename = os.path.basename(os.path.expanduser('~')) + '_' + str(now).split('.')[0].replace(' ', '_').replace(':', '-')+'_ext1'
 
-	subprocess.Popen(['rpicam-vid', '--camera', '1','-t', '590000', '--width', '6000', '--height', '1000', '-o', 'day1.h264'])
-	subprocess.Popen(['ffmpeg', '-i', 'day1.h264', os.path.join(outDir,filename)])
+	#subprocess.Popen(['rpicam-vid', '--camera', '1','-t', '590000', '--width', '6000', '--height', '1000', '-o', 'day1.h264'])
+	#subprocess.Popen(['ffmpeg', '-i', 'day1.h264', os.path.join(outDir,filename)])
+	subprocess.Popen(['rpicam-vid', '--camera', '1','-t', '590000', '--width', '6000', '--height', '1000', '-o', os.path.join(outDir,filename+'.h264')])

@@ -94,5 +94,20 @@ The images below illustrate pin/wire locations on the raspberry pi and relay mod
 ![Wire locations on relay connecting relay to lights and power](guideImages/lightsRelay2Lights.jpg)
 * Note that the black ends should be soldered together.
 
+## Pi Connect
+Click this:
+![button in menu](guideImages/piConnect.jpg)
+
+Choose 'Turn On Raspberry Pi Connect'. The browser will open. Sign in, using the username of the pi as the device name.
+
 ## Testing
 Restart and come back after 2 hours to check if expected files are in expected locations on hard drive. OsmiaCam should be created, with nestCam and ExtCam within. Each day will have each own folder within that. osmiaCAM will create 9 min 45 s video every 10 min of outside, 10s video of nest every 3 minutes during the day and every hour at night.
+
+## Check videos
+Videos are recorded as .h264s. To view them, download ffmpeg: [https://ffmpeg.org/](https://ffmpeg.org/)
+
+Then run this in terminal:
+```
+ffmpeg -i input.h264 output.mp4
+```
+Substituting input.h264 and output.mp4 as needed.

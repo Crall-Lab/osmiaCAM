@@ -12,7 +12,20 @@ from adafruit_ms8607 import MS8607
 import datetime
 import adafruit_ahtx0
 from time import sleep
+import os
 
+#make folder structure
+main = '/mnt/OsmiaCam/OsmiaVids'
+if not os.path.exists(main):
+	os.mkdir(main)
+parent = '/mnt/OsmiaCam/OsmiaVids/envLogger'
+if not os.path.exists(parent):
+	os.mkdir(parent)
+date = datetime.now().strftime("%D").replace('/', '_')
+outDir = os.path.join(parent, date)
+if not os.path.exists(outDir):
+	os.mkdir(outDir)
+    
 #Create sensor objects
 #inner = adafruit_ahtx0.AHTx0(board.I2C())
 outer = MS8607(board.I2C())
@@ -24,7 +37,7 @@ outer_meas = "," + "%.2f" % outer.pressure + "," + "%.2f" % outer.temperature + 
 #print(ds+ms8607_meas+inner_meas)
 print(ds+outer_meas)
 #Write measurements
-with open("/home/sicb_pi/envLogger.csv", "a") as f:
+with open(os.path.join(outDir,'_'.join(os.path.basename(os.path.expanduser('~')), date, 'envLog.csv')), "a") as f:
 				f.write(ds+outer_meas + '\n')
 print("Data recorded!")
 

@@ -32,15 +32,15 @@ if not(5 <= int(datetime.now().strftime('%H')) <= 20):
 	time.sleep(1)
 
 	now = datetime.now()
-	filename = str(now).split('.')[0].replace(' ', '_').replace(':', '-')+'_0.mp4'
+	filename = os.path.basename(os.path.expanduser('~')) + '_' + str(now).split('.')[0].replace(' ', '_').replace(':', '-')+'_nest0'
 
-	subprocess.Popen(['rpicam-vid', '--camera', '0', '-t', '10000', '--width', '6000', '--height', '2000', '-o', 'night0.h264'])
-	
+	#subprocess.Popen(['rpicam-vid', '--camera', '0', '-t', '10000', '--width', '6000', '--height', '2000', '-o', 'night0.h264'])
+	subprocess.Popen(['rpicam-vid', '--camera', '0', '-t', '10000', '--width', '6000', '--height', '2000', '-o', os.path.join(outDir,filename+'.h264')])
 
 	time.sleep(12)
 	light_line.set_value(1)
 	
-	subprocess.Popen(['ffmpeg', '-i', 'night0.h264', os.path.join(outDir,filename)])
+	#subprocess.Popen(['ffmpeg', '-i', 'night0.h264', os.path.join(outDir,filename)])
 
 	ps = subprocess.Popen('sudo halt',shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
 	output = ps.communicate()[0]

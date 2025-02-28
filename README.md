@@ -35,7 +35,7 @@ git clone https://github.com/Crall-Lab/osmiaCAM.git
 Or just download it as a zip.
 
 ## Create folder in /mnt/ called OsmiaCam
-Put dayShift0.py, dayShift1.py, nightShift1.py into home directory ('~').
+Move all contents of this repositoty into home directory ('~').
 
 ## Make mount directory
 ```bash
@@ -60,9 +60,6 @@ Open up crontab with the following command:
 crontab -e
 ```
 Then add the following lines to the bottom of the crontab file if they're not there already (to get permissions and mount directory for external hard drive)
-
-TODO: deal with path names (e.g., add 'HOME=/home/sicb_pi' to top of crontab, and reference everything to '~/osmiaCam'?)
-Or have them moved to the home directory as for other scripts
 ```bash
 @reboot sudo systemctl daemon-reload
 @reboot sudo mount /dev/sda1 /mnt/OsmiaCam -o umask=000
@@ -70,7 +67,7 @@ Or have them moved to the home directory as for other scripts
 */3 * * * * /usr/bin/python dayShift0.py
 @reboot sudo /usr/bin/python nightShift.py
 0 21 * * * sudo /usr/bin/python nightShift.py
-* * * * * /usr/bin/python3 /home/sicb_pi/osmiaCAM/envSensing_test.py >> /home/sicb_pi/osmiaCAM/log.txt 2>&1
+* * * * * /usr/bin/python3 envSensing_test.py >> envLog.txt 2>&1
 ```
 *NB if you want to use the camera (e.g, for preview, check focus, or to troubleshoot record.py script), turn off autoamted recording by commenting out that last line
 

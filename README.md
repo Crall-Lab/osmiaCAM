@@ -70,7 +70,7 @@ Then add the following lines to the bottom of the crontab file if they're not th
 */3 * * * * /usr/bin/python dayShift0.py
 @reboot sudo /usr/bin/python nightShift.py
 0 21 * * * sudo /usr/bin/python nightShift.py
-* * * * * /usr/bin/python3 envSensing_test.py >> envLog.txt 2>&1
+* * * * * /usr/bin/python3 envSensing.py >> envLog.txt 2>&1
 ```
 *NB if you want to use the camera (e.g, for preview, check focus, or to troubleshoot record.py script), turn off autoamted recording by commenting out that last line
 

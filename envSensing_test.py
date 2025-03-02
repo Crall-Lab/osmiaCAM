@@ -30,7 +30,7 @@ if not os.path.exists(outDir):
 #inner = adafruit_ahtx0.AHTx0(board.I2C())
 outer = MS8607(board.I2C())
 
-t = datetime.datetime.now()
+t = datetime.now()
 ds = t.strftime("%Y-%m-%d %H:%M:%S")
 outer_meas = "," + "%.2f" % outer.pressure + "," + "%.2f" % outer.temperature + "," + "%.2f" % outer.relative_humidity
 #inner_meas = "," + "%.2f" % inner.temperature + "," + "%.2f" % inner.relative_humidity + "\n"

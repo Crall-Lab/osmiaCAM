@@ -4,7 +4,7 @@
 Format SD card using [Raspberry Pi Imager](https://www.raspberrypi.com/software/)
 
 ## Change devce ID
-Go to Raspberry Pi COnfiguration and chnage the Hostname to a unique hostname for each unit.
+Go to Raspberry Pi COnfiguration and provide a unique username when prompted.
 
 ## Connecting cameras
 The nest camera should be connected as camera 0 and the external camera should be camera 1. The positions are indicated by CAM/DISP 0 and CAM/DISP 1 on the board of the raspberry pi:

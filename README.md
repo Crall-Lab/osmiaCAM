@@ -113,7 +113,7 @@ Choose 'Turn On Raspberry Pi Connect'. The browser will open. Sign in, using the
 Restart and come back after 2 hours to check if expected files are in expected locations on hard drive. OsmiaCam should be created, with nestCam and ExtCam within. Each day will have each own folder within that. osmiaCAM will create 9 min 45 s video every 10 min of outside, 10s video of nest every 3 minutes during the day and every hour at night.
 
 ## Check videos
-Videos are recorded as .h264s. To view them, download ffmpeg: [https://ffmpeg.org/](https://ffmpeg.org/) (NB: if you're on a mac, ffmpeg should come pre-installed)
+Videos are recorded as .mjpegs. To view them, download ffmpeg: [https://ffmpeg.org/](https://ffmpeg.org/) (NB: if you're on a mac, ffmpeg should come pre-installed)
 
 Then run this in terminal:
 ```

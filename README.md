@@ -102,6 +102,9 @@ The images below illustrate pin/wire locations on the raspberry pi and relay mod
 ![Wire locations on relay connecting relay to lights and power](guideImages/lightsRelay2Lights.jpg)
 * Note that the black ends should be soldered together.
 
+Turn on GPIO pins:
+Go to Raspberry PI Configuration --> Interfaces --> turn on SPI and I2C
+
 ## Pi Connect
 Click this:
 ![button in menu](guideImages/piConnect.jpg)

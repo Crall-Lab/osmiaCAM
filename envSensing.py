@@ -33,12 +33,12 @@ outer = MS8607(board.I2C())
 
 t = datetime.now()
 ds = t.strftime("%Y-%m-%d %H:%M:%S")
-outer_meas = "," + "%.2f" % outer.pressure + "," + "%.2f" % outer.temperature + "," + "%.2f" % atm.relative_humidity
+outer_meas = "," + "%.2f" % outer.pressure + "," + "%.2f" % outer.temperature + "," + "%.2f" % outer.relative_humidity
 inner_meas = "," + "%.2f" % inner.temperature + "," + "%.2f" % inner.relative_humidity 
 print(ds+outer_meas+inner_meas)
 
 #Write measurements
-with open(os.path.join(outDir,'_'.join(os.path.basename(os.path.expanduser('~')), date, 'envLog.csv')), "a") as f:
+with open(os.path.join(outDir,'_'.join([os.path.basename(os.path.expanduser('~')), date, 'envLog.csv'])), "a") as f:
 	f.write(ds+outer_meas+inner_meas+"\n")
 print("Data recorded!")
 

@@ -9,7 +9,7 @@
 import board
 import busio
 from adafruit_ms8607 import MS8607
-from datetime import datetime
+import datetime
 import adafruit_ahtx0
 from time import sleep
 import os

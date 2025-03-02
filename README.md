@@ -10,6 +10,14 @@ Go to Raspberry Pi COnfiguration and chnage the Hostname to a unique hostname fo
 The nest camera should be connected as camera 0 and the external camera should be camera 1. The positions are indicated by CAM/DISP 0 and CAM/DISP 1 on the board of the raspberry pi:
 ![Camera connections](guideImages/camera.jpg)
 
+## Check mounting location of external hard drive
+run the following in terminal:
+```bash
+sudo fdisk -l
+```
+This will list mounted drives, and look for /dev/sda1 in last line.
+Hard drives must be mounted at sda1. Do not connect other hard drives to pi.
+
 ## Preview camera (to test focus, framing, etc)
 ```bash
 rpicam-hello -t 0
@@ -45,7 +53,6 @@ Move all contents of this repositoty into home directory ('~'). You can do it in
 ```bash
 cp -rf osmiaCam ~
 ```
-
 
 ## Make mount directory
 ```bash
@@ -83,13 +90,10 @@ Then add the following lines to the bottom of the crontab file if they're not th
 ```
 *NB if you want to use the camera (e.g, for preview, check focus, or to troubleshoot record.py script), turn off autoamted recording by commenting out that last line
 
-## Check mounting location of external hard drive
-run the following in terminal:
+Restart computer after updating crontab. osmiaCAM should run automatically after this.
 ```bash
-sudo fdisk -l
+sudo reboot -h now
 ```
-This will list mounted drives, and look for /dev/sda1 in last line.
-Hard drives must be mounted at sda1. Do not connect other hard drives to pi.
 
 ## Lighting
 In order to use the relay module to control the lights automatically, the raspberry pi, relay, and lights must be connected like so:

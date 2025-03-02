@@ -38,12 +38,17 @@ git clone https://github.com/Crall-Lab/osmiaCAM.git
 Or just download it as a zip.
 
 ## Create folder in /mnt/ called OsmiaCam
-Move all contents of this repositoty into home directory ('~').
+Move all contents of this repositoty into home directory ('~'). You can do it in the GUI, or input this into the terminal:
+```bash
+cp -rf osmiaCam ~
+```
+
 
 ## Make mount directory
 ```bash
 sudo mkdir /mnt/OsmiaCam
 ```
+If folder exists, it will refuse to make the directory. Ignore it and move on.
 
 ## Install libraries for environmental sensors
 ```bash

@@ -3,6 +3,9 @@
 ## Install Raspberry Pi software
 Format SD card using [Raspberry Pi Imager](https://www.raspberrypi.com/software/)
 
+## Change devce ID
+Go to Raspberry Pi COnfiguration and chnage the Hostname to a unique hostname for each unit.
+
 ## Connecting cameras
 The nest camera should be connected as camera 0 and the external camera should be camera 1. The positions are indicated by CAM/DISP 0 and CAM/DISP 1 on the board of the raspberry pi:
 ![Camera connections](guideImages/camera.jpg)
@@ -102,6 +105,7 @@ The images below illustrate pin/wire locations on the raspberry pi and relay mod
 ## Pi Connect
 Click this:
 ![button in menu](guideImages/piConnect.jpg)
+Input the hostname of the pi as the name of your device when prompted.
 
 Choose 'Turn On Raspberry Pi Connect'. The browser will open. Sign in, using the username of the pi as the device name.
 

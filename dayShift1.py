@@ -19,4 +19,4 @@ if 5 <= int(datetime.now().strftime('%H')) <= 20:
 
 	#subprocess.Popen(['rpicam-vid', '--camera', '1','-t', '590000', '--codec', 'mjpeg', '--width', '6000', '--height', '1000', '-o', 'day1.mjpeg'])
 	#subprocess.Popen(['ffmpeg', '-i', 'day1.h264', os.path.join(outDir,filename+'.mp4')])
-	subprocess.Popen(['rpicam-vid', '--camera', '1','-t', '590000', '--codec', 'mjpeg', '--width', '6000', '--height', '1000', '-o', os.path.join(outDir,filename+'.mjpeg')])
+	subprocess.Popen(['rpicam-vid', '--camera', '1','-t', '590000', '--codec', 'mjpeg', '--width', '4096', '--height', '700', '-o', os.path.join(outDir,filename+'.mjpeg')])

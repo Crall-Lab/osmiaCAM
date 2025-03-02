@@ -74,6 +74,7 @@ Then add the following lines to the bottom of the crontab file if they're not th
 ```bash
 @reboot sudo systemctl daemon-reload
 @reboot sudo mount /dev/sda1 /mnt/OsmiaCam -o umask=000
+@reboot sudo chmod 777 /mnt/OsmiaCam
 */10 * * * * /usr/bin/python dayShift1.py
 */3 * * * * /usr/bin/python dayShift0.py
 @reboot sudo /usr/bin/python nightShift.py

@@ -37,7 +37,7 @@ if 5 <= int(datetime.now().strftime('%H')) <= 20:
 	#subprocess.Popen(['rpicam-vid', '--camera', '0','-t', '10000', '--codec', 'mjpeg', '--width', '6000', '--height', '2000', '-o', 'day0.mjpeg'])
 	#subprocess.Popen(['ffmpeg', '-i', 'day0.mjpeg', os.path.join(outDir,filename+'.mp4')])
 	subprocess.Popen(['rpicam-vid', '--camera', '0','-t', '10000', '--codec', 'mjpeg', '--width', '4096', '--height', '1400', '-o', 'day0.mjpeg'])
-	os.move('day0.mjpeg', os.path.join(outDir,filename+'.mjpeg'))
+	os.rename('day0.mjpeg', os.path.join(outDir,filename+'.mjpeg'))
 
 	time.sleep(12)
 	light_line.set_value(1)

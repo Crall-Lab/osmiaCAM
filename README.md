@@ -68,6 +68,8 @@ sudo pip3 install --break-system-packages adafruit-circuitpython-ahtx0
 
 ## Install openCV library
 ```bash
+python3 -m venv osmia_2025
+source osmia_2025/bin/activate
 pip3 install opencv-contrib-python
 ```
 

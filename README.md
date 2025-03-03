@@ -56,8 +56,6 @@ rpicam-jpeg -o test.jpeg
 ```bash
 git clone https://github.com/Crall-Lab/osmiaCAM.git
 ```
-
-## Create folder in /mnt/ called OsmiaCam
 Move all contents of this repositoty into home directory ('~'). You can do it in the GUI, or input this into the terminal:
 ```bash
 cp -rf osmiaCam ~

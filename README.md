@@ -93,6 +93,8 @@ Open up crontab with the following command:
 ```bash
 crontab -e
 ```
+Choose 1.
+ 
 Then add the following lines to the bottom of the crontab file if they're not there already (to get permissions and mount directory for external hard drive)
 ```bash
 @reboot sudo systemctl daemon-reload

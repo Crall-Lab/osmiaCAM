@@ -16,7 +16,17 @@ if 5 <= int(datetime.now().strftime('%H')) <= 20:
 
 	now = datetime.now()
 	filename = os.path.basename(os.path.expanduser('~')) + '_' + str(now).split('.')[0].replace(' ', '_').replace(':', '-')+'_ext1'
-
+	
 	#subprocess.Popen(['rpicam-vid', '--camera', '1','-t', '590000', '--codec', 'mjpeg', '--width', '6000', '--height', '1000', '-o', 'day1.mjpeg'])
 	#subprocess.Popen(['ffmpeg', '-i', 'day1.h264', os.path.join(outDir,filename+'.mp4')])
 	subprocess.Popen(['rpicam-vid', '--camera', '1', '-t', '590000', '--codec', 'mjpeg', '--width', '4056', '--height', '700', '-o', os.path.join(outDir,filename+'.mjpeg')])
+
+    
+    #video_path = os.path.join(outDir, filename + '.h264')
+
+    # Record video in H.264 with reduced bitrate and framerate
+    #subprocess.run([
+    #    'rpicam-vid', '--camera', '1', '-t', '590000', '--codec', 'h264', 
+    #    '--width', '4056', '--height', '700', '--framerate', '15', '--bitrate', '1000000',
+    #    '-o', video_path
+    #])

@@ -38,5 +38,15 @@ if 5 <= int(datetime.now().strftime('%H')) <= 20:
 	#subprocess.Popen(['ffmpeg', '-i', 'day0.mjpeg', os.path.join(outDir,filename+'.mp4')])
 	subprocess.Popen(['rpicam-vid', '--camera', '0','-t', '10000', '--codec', 'mjpeg', '--width', '4056', '--height', '1400', '-o', os.path.join(outDir,filename+'.mjpeg')])
 
+	#Alt:
+	#video_path = os.path.join(outDir, filename + '.h264')
+
+    # Record video in H.264 with reduced bitrate and framerate
+    #subprocess.run([
+    #    'rpicam-vid', '--camera', '0', '-t', '10000', '--codec', 'h264', 
+    #    '--width', '4056', '--height', '1400', '--framerate', '15', '--bitrate', '1000000',
+    #    '-o', video_path
+    #])
+	
 	time.sleep(12)
 	light_line.set_value(1)

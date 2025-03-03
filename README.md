@@ -66,6 +66,11 @@ sudo pip3 install --break-system-packages adafruit-circuitpython-ms8607
 sudo pip3 install --break-system-packages adafruit-circuitpython-ahtx0
 ```
 
+## Install openCV library
+```bash
+pip3 install opencv-contrib-python
+```
+
 Now it's good to reboot:
 ```bash
 sudo reboot -h now

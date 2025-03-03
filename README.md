@@ -127,7 +127,7 @@ The two wires coming from the relay can then be plugged into the lights and batt
 
 
 Turn on GPIO pins:
-Go to Raspberry PI Configuration --> Interfaces --> turn on SPI and I2C
+Click on the raspberry --> settings --> Raspberry PI Configuration --> Interfaces --> turn on SPI and I2C
 
 
 

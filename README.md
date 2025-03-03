@@ -132,13 +132,31 @@ Go to Raspberry PI Configuration --> Interfaces --> turn on SPI and I2C
 Restart and come back after 2 hours to check if expected files are in expected locations on hard drive. OsmiaCam should be created, with nestCam and ExtCam within. Each day will have each own folder within that. osmiaCAM will create 9 min 45 s video every 10 min of outside, 10s video of nest every 3 minutes during the day and every hour at night.
 
 ## Check videos
-Videos are recorded as .mjpegs. To view them, download ffmpeg: [https://ffmpeg.org/](https://ffmpeg.org/) (NB: if you're on a mac, ffmpeg should come pre-installed)
+Videos are recorded as .h264s, which are great for file sizes but a bit cumbersome to convert and view. We have written some utility functions to help out with this. 
+First, for the nest and outside videos, a single frame from each video is now output automatically to check framing, etc
+Second, you can first convert 'raw' h264 videos to mp4 on the pi with the 'converth264.py' function, and then view them with the 'play_mp4.py' script. Here's an example:
+
+## Install openCV library
+First if you haven't already, create a virtual environment and install openCV
+
+```bash
+cd ~
+python3 -m venv osmia_2025
+source osmia_2025/bin/activate
+pip3 install opencv-contrib-python
+```
 
 Then run this in terminal:
-```
+```bash
 cd ~
 source osmia_2025/bin/activate
-python3 playVideo
+python3 converth264.py
 ```
+This will prompt you for a filename. The easiest way to get this when communicating over Raspberry Pi Connect is by navigating to the h264 file you'd like to view, selecting 'copy path' under 'Edit' in the file browser, then click 'copy from remote'. Then in the window prompt, click 'paste to remote' back in the Terminal window
 
-This script will prompt you for a filename. The easiest way to get this when communicating over Raspberry Pi Connect is by navigating to the file you'd like to view, selecting 'copy path' under 'Edit' in the file browser, then click 'copy from remote'. Then in the window prompt, click 'paste to remote' 
+After a few moments (maybe a couple minutes for full sized videos), there should now be an mp4 video with the same filename. To view this file, now run:
+
+```bash
+python3 play_mp4.py
+```
+This will again prompt you for a filename, which now you'll have to add as the 'mp4' file, as above

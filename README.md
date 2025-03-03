@@ -51,6 +51,7 @@ rpicam-jpeg -o test.jpeg
    POWER_OFF_ON_HALT = 1
    WAKE_ON_GPIO=0
    ```
+6. After adding the lines, ctl+s will save. Then use ctl+x to leave.
 
 ## Clone this repository
 ```bash
@@ -103,6 +104,8 @@ Then add the following lines to the bottom of the crontab file if they're not th
 0 21 * * * sudo /usr/bin/python nightShift.py
 * * * * * /usr/bin/python3 envSensing.py >> envLog.txt 2>&1
 ```
+After adding the lines, ctl+s will save. Then use ctl+x to leave.
+
 *NB if you want to use the camera (e.g, for preview, check focus, or to troubleshoot record.py script), turn off autoamted recording by commenting out that last line
 
 Restart computer after updating crontab. osmiaCAM should run automatically after this.

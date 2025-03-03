@@ -134,7 +134,7 @@ Videos are recorded as .mjpegs. To view them, download ffmpeg: [https://ffmpeg.o
 
 Then run this in terminal:
 ```
-cd ~/osmiaCAM
+cd ~
 source osmia_2025/bin/activate
 python3 playVideo
 ```

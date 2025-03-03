@@ -116,7 +116,7 @@ sudo reboot -h now
 ```
 
 ## Lighting
-In order to use the relay module to control the lights automatically, the raspberry pi, relay, and lights must be connected properly. The images below illustrate pin/wire locations on the raspberry pi and relay module.
+In order to use the relay module to control the lights automatically, the raspberry pi, relay, and lights must be connected properly. The images below illustrate pin/wire locations on the raspberry pi and relay module. To insert wires to the relay, use a screwdriver
 
 ![Wire locations on raspberry pi](guideImages/lightsPi2Relay.jpg)
 ![Wire locations on relay connecting relay to raspberry pi](guideImages/lightsRelay2Pi.jpg)

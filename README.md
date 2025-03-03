@@ -117,15 +117,17 @@ sudo reboot -h now
 
 ## Lighting
 In order to use the relay module to control the lights automatically, the raspberry pi, relay, and lights must be connected like so:
-![](guideImages/lightsOverview.jpg)
-The two wires coming from the relay can then be plugged into the lights and battery in any configuration.
+#![](guideImages/lightsOverview.jpg) #We need one innie and one outie instead of two outies
 
 The images below illustrate pin/wire locations on the raspberry pi and relay module.
 
 ![Wire locations on raspberry pi](guideImages/lightsPi2Relay.jpg)
 ![Wire locations on relay connecting relay to raspberry pi](guideImages/lightsRelay2Pi.jpg)
 ![Wire locations on relay connecting relay to lights and power](guideImages/lightsRelay2Lights.jpg)
-* Note that the black ends should be soldered together.
+* Note that only the black ends should be soldered together.
+
+The two wires coming from the relay can then be plugged into the lights and battery. The configuration does not matter.
+
 
 Turn on GPIO pins:
 Go to Raspberry PI Configuration --> Interfaces --> turn on SPI and I2C

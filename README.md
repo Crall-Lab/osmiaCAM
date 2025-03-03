@@ -13,6 +13,8 @@ Input the hostname of the pi as the name of your device when prompted.
 
 Choose 'Turn On Raspberry Pi Connect'. The browser will open. Sign in, using the username of the pi as the device name.
 
+You will now be able to connect to the raspberry pi here: [https://connect.raspberrypi.com/devices](https://connect.raspberrypi.com/devices)
+
 ## Connecting cameras
 The nest camera should be connected as camera 0 and the external camera should be camera 1. The positions are indicated by CAM/DISP 0 and CAM/DISP 1 on the board of the raspberry pi:
 ![Camera connections](guideImages/camera.jpg)

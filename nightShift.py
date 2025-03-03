@@ -5,7 +5,11 @@ import time
 import gpiod
 import subprocess
 
-if not(5 <= int(datetime.now().strftime('%H')) <= 20):
+
+ds_start_t = 7 #Start of dayshift
+ds_end_t = 19 #End of dayshift
+
+if not(ds_start_t <= int(datetime.now().strftime('%H')) <= ds_end_t):
 	ps = subprocess.Popen('echo +3600 | sudo tee /sys/class/rtc/rtc0/wakealarm',shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
 	output = ps.communicate()[0]
 	

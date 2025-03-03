@@ -9,7 +9,12 @@ import time
 import gpiod
 import subprocess
 
-if 5 <= int(datetime.now().strftime('%H')) <= 20:
+
+start_t = 7
+end_t = 19
+duration = 590000  # Recording duration in milliseconds
+
+if start_t <= int(datetime.now().strftime('%H')) <= end_t:
 	main = '/mnt/OsmiaCam/OsmiaVids'
 	if not os.path.exists(main):
 		os.mkdir(main)

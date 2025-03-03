@@ -58,7 +58,7 @@ git clone https://github.com/Crall-Lab/osmiaCAM.git
 ```
 Move all contents of this repositoty into home directory ('~'). You can do it in the GUI, or input this into the terminal:
 ```bash
-cp -rf osmiaCam ~
+cp -rf osmiaCAM/* ~
 ```
 
 ## Make mount directory

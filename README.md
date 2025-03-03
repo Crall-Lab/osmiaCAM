@@ -3,8 +3,15 @@
 ## Install Raspberry Pi software
 Format SD card using [Raspberry Pi Imager](https://www.raspberrypi.com/software/)
 
-## Change devce ID
-Go to Raspberry Pi COnfiguration and provide a unique username when prompted. Also change hostname to the same in configurations.
+## Change device ID
+Go to Raspberry Pi COnfiguration and provide a unique username when prompted. *NB user names should be labeled in a repeatable way (e.g., 'osmia1', 'osmia2') to easily associated with physical units. The user name will be saved in output files.
+
+## Pi Connect
+Click this:
+![button in menu](guideImages/piConnect.jpg)
+Input the hostname of the pi as the name of your device when prompted.
+
+Choose 'Turn On Raspberry Pi Connect'. The browser will open. Sign in, using the username of the pi as the device name.
 
 ## Connecting cameras
 The nest camera should be connected as camera 0 and the external camera should be camera 1. The positions are indicated by CAM/DISP 0 and CAM/DISP 1 on the board of the raspberry pi:
@@ -68,6 +75,7 @@ sudo pip3 install --break-system-packages adafruit-circuitpython-ahtx0
 
 ## Install openCV library
 ```bash
+cd ~
 python3 -m venv osmia_2025
 source osmia_2025/bin/activate
 pip3 install opencv-contrib-python
@@ -116,12 +124,7 @@ The images below illustrate pin/wire locations on the raspberry pi and relay mod
 Turn on GPIO pins:
 Go to Raspberry PI Configuration --> Interfaces --> turn on SPI and I2C
 
-## Pi Connect
-Click this:
-![button in menu](guideImages/piConnect.jpg)
-Input the hostname of the pi as the name of your device when prompted.
 
-Choose 'Turn On Raspberry Pi Connect'. The browser will open. Sign in, using the username of the pi as the device name.
 
 ## Testing
 Restart and come back after 2 hours to check if expected files are in expected locations on hard drive. OsmiaCam should be created, with nestCam and ExtCam within. Each day will have each own folder within that. osmiaCAM will create 9 min 45 s video every 10 min of outside, 10s video of nest every 3 minutes during the day and every hour at night.
@@ -131,6 +134,9 @@ Videos are recorded as .mjpegs. To view them, download ffmpeg: [https://ffmpeg.o
 
 Then run this in terminal:
 ```
-ffmpeg -i input.h264 output.mp4
+cd ~/osmiaCAM
+source osmia_2025/bin/activate
+python3 playVideo
 ```
-Substituting input.h264 and output.mp4 as needed.
+
+This script will prompt you for a filename. The easiest way to get this when communicating over Raspberry Pi Connect is by navigating to the file you'd like to view, selecting 'copy path' under 'Edit' in the file browser, then click 'copy from remote'. Then in the window prompt, click 'paste to remote' 

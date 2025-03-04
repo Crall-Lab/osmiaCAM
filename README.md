@@ -30,6 +30,8 @@ Hard drives must be mounted at sda1. Do not connect other hard drives to pi.
 ## Preview camera (to test focus, framing, etc)
 ```bash
 rpicam-hello -t 0 --camera 0 #you should see the nest
+```
+```bash
 rpicam-hello -t 0 --camera 1 #you should see the outside
 ```
 

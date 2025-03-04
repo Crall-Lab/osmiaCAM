@@ -1,6 +1,6 @@
 # osmiaCAM
 
-##Camera Structure Build
+## Camera Structure Build
 
 1. Laser Cut all pieces for OsmiaCam Structure build. Per Unit, you should have:
 	- 2 Large triangle walls

@@ -1,5 +1,30 @@
 # osmiaCAM
 
+##Camera Structure Build
+
+1. Laser Cut all pieces for OsmiaCam Structure build. Per Unit, you should have:
+	- 2 Large triangle walls
+	- 2 long side walls
+	- 2 door pieces (that attach to the long side walls - these are cut from the side walls
+	- 1 Camera Platform
+	- 1 Y-Shaped Brace
+	- 1 Camera Mount
+	- 8 Internal Triangle Braces
+2. Using acrylic glue, connect one Large triangle wall to one long side wall
+3. Use the small bracing triangle and line the seam between the connecting points of the long wall and side walls
+4. Repeat steps (2) and (3) with the remaining triangle wall and long wall
+5. Allow for the triangle walls and their connected long walls to set (using something to brace the connection between the side walls and long wall to keep the connection at a right angle as much as possible)
+6. Once dry, take one combined piece and lay it down so that the triangle wall is flat on a table and the long wall is standing up
+7. Adding acrylic glue to one side of the camera platform, fit the in tabs into the cut rectangles in the middle of the triangle wall
+8. Adding acrylic glue to one side of the Y-braces fit these pieces in the smaller rectangle openings on the bottom of 
+9. Line the remaining connected pieces (triangle wall and long wall) and the top camera platform tabs and top y-brace tabs with glue
+10. Fit the second connected piece on top of the flat combined piece, sliding the camera platform tabs into the rectangular openings and the y-brace tabs in the smaller rectangular openings at the bottom.
+11. Let glue set
+12. Depending on the need to remove cameras, either pop the top piece with camera mounts onto the top of the structure or affix with glue 
+13. Set the structure upright, and using tape, attach the long wall doors so that the door can hinge open and closed and have a handle/tab that you can use to open it. 
+14. Your structure is built!
+
+
 ## Install Raspberry Pi software
 Format SD card using [Raspberry Pi Imager](https://www.raspberrypi.com/software/)
 

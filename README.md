@@ -346,7 +346,7 @@ Then add the following lines to the bottom of the crontab file if they're not th
 @reboot sudo systemctl daemon-reload
 @reboot sudo mount /dev/sda1 /mnt/OsmiaCam -o umask=000
 @reboot sudo chmod 777 /mnt/OsmiaCam
-*/10 * * * * /usr/bin/python dayShift1.py
+*/10 * * * * /usr/bin/python greenHouse.py
 ```
 
 After adding the lines, ctl+s will save. Then use ctl+x to leave.
@@ -371,7 +371,7 @@ Now comment out the lines that refer to dayShift scripts. It should look like th
 @reboot sudo systemctl daemon-reload
 @reboot sudo mount /dev/sda1 /mnt/OsmiaCam -o umask=000
 @reboot sudo chmod 777 /mnt/OsmiaCam
-#*/10 * * * * /usr/bin/python dayShift1.py
+#*/10 * * * * /usr/bin/python greenHouse.py
 ```
 
 Remember to uncomment these lines before actually deploying the unit.

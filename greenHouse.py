@@ -28,8 +28,7 @@ if start_t <= int(datetime.now().strftime('%H')) <= end_t:
 
     # Record video in H.264 with reduced bitrate and framerate
     subprocess.run([
-        'rpicam-vid', '-t', str(duration), '--codec', 'h264', 
-        '--width', '4056', '--height', '700', '--framerate', '15', '--bitrate', '1000000',
+        'rpicam-vid', '-t', str(duration), '--codec', 'h264', '--framerate', '15', '--bitrate', '1000000',
         '-o', video_path
     ])
 

@@ -26,6 +26,15 @@ This README is for the osmiaCAM build instructions and GreenHouse Osmia Block bu
 13. Set the structure upright, and using tape, attach the long wall doors so that the door can hinge open and closed and have a handle/tab that you can use to open it. 
 14. Your structure is built!
 
+## Labelling Nest Blocks
+To help monitor and track which cells are in view and being used by bees, you will need to label the nest block entrances in two places
+	
+ (1) At the nest entrance (so that the forage camera can view the labels)
+ 
+ (2) At a location that will be inside the nest structure and visible by the internal nest camera
+  
+Suggested labeling is at minimum every five cells.
+
 
 ## Install Raspberry Pi software
 Format SD card using [Raspberry Pi Imager](https://www.raspberrypi.com/software/)
@@ -161,6 +170,19 @@ The two wires coming from the relay can then be plugged into the lights and batt
 
 ## Turn on GPIO pins
 Click on the raspberry --> settings --> Raspberry PI Configuration --> Interfaces --> turn on SPI and I2C
+
+## Attaching LED Lights
+1. Attach LED light wires to Screw Connector [Red is positive(+) and Black is negative (-)]
+	To attach the wired to the screw connector loosen both screws and slide the correct wires into its corresponding slot and then using a screw driver tighten the screws so the wires are secure
+2. Line the path/areas over which the lights will lay using black (or blue) masking tape
+		To diffuse the portions of lights that will line the camera mount (top of structure) use separate pieces so that if needed the camera mount pieces can slide off if needed.
+3. With the screw connector end starting at the base of the structure line the lights across the tape with the LED facing down securing with strips of tape
+	We want there to be slack in the connection between the lights and the Pi, so start lining the lights to that the actual lights are starting on the structure and the wires are off the edge of the structure.
+	The lights should run vertically up one side of the long wall across the top of the camera mount and down the opposite side wall; the lights should curve at the base of the long wall and then work back up vertically up and down the other sides of the side walls.
+4. Once lights are lining the structure, using duct tape, secure and cover the light path
+	The tape should cover the lights, securing the LED light down to the structure
+	To cover the portion of lights lining the camera mount (top of structure) use separate pieces so that if needed, the camera mount pieces can slide off if needed.
+5. Cut off the excess light string where needed
 
 ## Testing
 Restart and come back after 2 hours to check if expected files are in expected locations on hard drive. OsmiaCam should be created, with nestCam and ExtCam within. Each day will have each own folder within that. osmiaCAM will create 9 min 45 s video every 10 min of outside, 10s video of nest every 3 minutes during the day and every hour at night.

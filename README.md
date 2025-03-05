@@ -77,12 +77,14 @@ rpicam-jpeg -o test.jpeg
    ```bash
    sudo hwclock --systohc
    ```
-5. Edit configurations: ```sudo -E rpi-eeprom-config --edit```, modifying the two lines (if these variables do not exist, add them):
+5. Edit configurations,
+   ```sudo -E rpi-eeprom-config --edit```
+   modifying the two lines (if these variables do not exist, add them):
    ```
    POWER_OFF_ON_HALT = 1
    WAKE_ON_GPIO=0
    ```
-6. After adding the lines, ctl+s will save. Then use ctl+x to leave.
+7. After adding the lines, ctl+s will save. Then use ctl+x to leave.
 
 ## Clone this repository
 ```bash
@@ -260,7 +262,7 @@ rpicam-hello -t 0 --camera 1 #you should see nest block face
 
 ## Take a single full resolution photo
 ```bash
-rpicam-jpeg -o test.jpeg
+rpicam-jpeg -o test.jpeg --camera 1
 ```
 ## Setting up RTC
 * Note: Requires access with internet
@@ -270,12 +272,16 @@ rpicam-jpeg -o test.jpeg
    ```bash
    sudo hwclock --systohc
    ```
-5. Edit configurations: ```sudo -E rpi-eeprom-config --edit```, modifying the two lines (if these variables do not exist, add them):
+5. Edit configurations,
+   ```
+   sudo -E rpi-eeprom-config --edit
+   ```
+   modifying the two lines (if these variables do not exist, add them):
    ```
    POWER_OFF_ON_HALT = 1
    WAKE_ON_GPIO=0
    ```
-6. After adding the lines, ctl+s will save. Then use ctl+x to leave.
+7. After adding the lines, ctl+s will save. Then use ctl+x to leave.
 
 ## Clone this repository
 ```bash
@@ -342,7 +348,7 @@ Now comment out the lines that refer to dayShift scripts. It should look like th
 @reboot sudo systemctl daemon-reload
 @reboot sudo mount /dev/sda1 /mnt/OsmiaCam -o umask=000
 @reboot sudo chmod 777 /mnt/OsmiaCam
-*/10 * * * * /usr/bin/python dayShift1.py
+#*/10 * * * * /usr/bin/python dayShift1.py
 ```
 
 Remember to uncomment these lines before actually deploying the unit.

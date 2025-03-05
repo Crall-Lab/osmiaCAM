@@ -28,6 +28,8 @@
 ## Install Raspberry Pi software
 Format SD card using [Raspberry Pi Imager](https://www.raspberrypi.com/software/)
 
+This guide uses a raspberry pi 5, and the 64-bit OS.
+
 ## Change device ID
 Go to Raspberry Pi COnfiguration and provide a unique username when prompted. *NB user names should be labeled in a repeatable way (e.g., 'osmia1', 'osmia2') to easily associated with physical units. The user name will be saved in output files.
 
@@ -153,14 +155,29 @@ In order to use the relay module to control the lights automatically, the raspbe
 
 The two wires coming from the relay can then be plugged into the lights and battery. The configuration does not matter.
 
-
-Turn on GPIO pins:
+## Turn on GPIO pins
 Click on the raspberry --> settings --> Raspberry PI Configuration --> Interfaces --> turn on SPI and I2C
-
-
 
 ## Testing
 Restart and come back after 2 hours to check if expected files are in expected locations on hard drive. OsmiaCam should be created, with nestCam and ExtCam within. Each day will have each own folder within that. osmiaCAM will create 9 min 45 s video every 10 min of outside, 10s video of nest every 3 minutes during the day and every hour at night.
+
+## Deployment
+While deploying, it is advisable to check the focus of the camera and adjust as needed, even if the unit has been built and tested in the lab. However, if the above steps have been executed successfully, the normal functioning of the unit will interfer with this. To avoid this, edit the crontab:
+```bash
+crontab -e
+```
+Now comment out the lines that refer to dayShift and nightShift scripts. It should look like this:
+```bash
+@reboot sudo systemctl daemon-reload
+@reboot sudo mount /dev/sda1 /mnt/OsmiaCam -o umask=000
+@reboot sudo chmod 777 /mnt/OsmiaCam
+#*/10 * * * * /usr/bin/python dayShift1.py
+#*/3 * * * * /usr/bin/python dayShift0.py
+#@reboot sudo /usr/bin/python nightShift.py
+#0 21 * * * sudo /usr/bin/python nightShift.py
+* * * * * /usr/bin/python3 envSensing.py >> envLog.txt 2>&1
+```
+Remember to uncomment these lines before actually deploying the unit. Note also that nightShift runs at startup and will put the unit to sleep after 10 seconds. If a unit must be deployed at night, edit the crontab during the day ahead of time.
 
 ## Check videos
 Videos are recorded as .h264s, which are great for file sizes but a bit cumbersome to convert and view. We have written some utility functions to help out with this. 

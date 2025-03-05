@@ -38,13 +38,17 @@ def plot_data(df):
 
 # Main execution
 if __name__ == "__main__":
-    root_directory = '/home/pi/data'  # Change this to the root directory where files are stored
-    csv_files = find_csv_files(root_directory)
+    root_directory = input("Enter the root directory to search: ").strip()
     
-    if csv_files:
-        combined_df = load_and_combine_csv(csv_files)
-        print(f"Loaded {len(combined_df)} rows from {len(csv_files)} files.")
-        
-        plot_data(combined_df)
+    if not os.path.exists(root_directory):
+        print("Error: Directory does not exist. Please enter a valid path.")
     else:
-        print("No 'envLog.csv' files found.")
+        csv_files = find_csv_files(root_directory)
+        
+        if csv_files:
+            combined_df = load_and_combine_csv(csv_files)
+            print(f"Loaded {len(combined_df)} rows from {len(csv_files)} files.")
+            
+            plot_data(combined_df)
+        else:
+            print("No 'envLog.csv' files found.")

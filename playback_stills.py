@@ -31,7 +31,7 @@ def display_images(image_files):
         cv2.putText(img, filename, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
         
         cv2.imshow("Image Viewer", img)
-        if cv2.waitKey(500) & 0xFF == ord('q'):  # Press 'q' to exit early
+        if cv2.waitKey(50) & 0xFF == ord('q'):  # Press 'q' to exit early
             break
     
     cv2.destroyAllWindows()

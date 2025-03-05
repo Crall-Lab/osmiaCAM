@@ -23,8 +23,9 @@ This README is for the [osmiaCAM build instructions](https://github.com/Crall-La
 10. Fit the second connected piece on top of the flat combined piece, sliding the camera platform tabs into the rectangular openings and the y-brace tabs in the smaller rectangular openings at the bottom.
 11. Let glue set
 12. Depending on the need to remove cameras, either pop the top piece with camera mounts onto the top of the structure or affix with glue 
-13. Set the structure upright, and using tape, attach the long wall doors so that the door can hinge open and closed and have a handle/tab that you can use to open it. 
-14. Your structure is built!
+13. Set the structure upright, and using tape, attach the long wall doors so that the door can hinge open and closed and have a handle/tab that you can use to open it.
+14. Label the structure with the username of its corresponding Raspberry Pi Unit.
+15. Your structure is built!
 
 ## Labelling Nest Blocks
 To help monitor and track which cells are in view and being used by bees, you will need to label the nest block entrances in two places

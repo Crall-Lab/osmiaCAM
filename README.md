@@ -184,7 +184,7 @@ Videos are recorded as .h264s, which are great for file sizes but a bit cumberso
 First, for the nest and outside videos, a single frame from each video is now output automatically to check framing, etc
 Second, you can first convert 'raw' h264 videos to mp4 on the pi with the 'converth264.py' function, and then view them with the 'play_mp4.py' script. Here's an example:
 
-## Install openCV library
+### Install openCV library
 First if you haven't already, create a virtual environment and install openCV
 
 ```bash

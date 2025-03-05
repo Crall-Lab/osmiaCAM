@@ -208,3 +208,11 @@ After a few moments (maybe a couple minutes for full sized videos), there should
 python3 play_mp4.py
 ```
 This will again prompt you for a filename, which now you'll have to add as the 'mp4' file, as above
+
+### playback timelapse
+
+```bash
+source osmia_2025/bin/activate
+cd ~/osmiaCAM
+python3 playback_stills.py
+```

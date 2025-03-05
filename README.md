@@ -1,4 +1,4 @@
-This README is for the osmiaCAM build instructions and GreenHouse Osmia Block build instructions.
+This README is for the [osmiaCAM build instructions](https://github.com/Crall-Lab/osmiaCAM/blob/main/README.md#osmiacam) and [GreenHouse Osmia Block](https://github.com/Crall-Lab/osmiaCAM/blob/main/README.md#greenhouse-osmia-block) build instructions.
 
 # osmiaCAM
 

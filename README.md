@@ -146,7 +146,7 @@ Then add the following lines to the bottom of the crontab file if they're not th
 */10 * * * * /usr/bin/python dayShift1.py
 */3 * * * * /usr/bin/python dayShift0.py
 @reboot /usr/bin/python nightShift.py
-0 21 * * * /usr/bin/python nightShift.py
+0 20 * * * /usr/bin/python nightShift.py
 * * * * * /usr/bin/python3 envSensing.py >> envLog.txt 2>&1
 ```
 After adding the lines, ctl+s will save. Then use ctl+x to leave.
@@ -201,7 +201,7 @@ Now comment out the lines that refer to dayShift and nightShift scripts. It shou
 #*/10 * * * * /usr/bin/python dayShift1.py
 #*/3 * * * * /usr/bin/python dayShift0.py
 #@reboot /usr/bin/python nightShift.py
-#0 21 * * * /usr/bin/python nightShift.py
+#0 20 * * * /usr/bin/python nightShift.py
 * * * * * /usr/bin/python3 envSensing.py >> envLog.txt 2>&1
 ```
 Remember to uncomment these lines before actually deploying the unit. Note also that nightShift runs at startup and will put the unit to sleep after 10 seconds. If a unit must be deployed at night, edit the crontab during the day ahead of time.

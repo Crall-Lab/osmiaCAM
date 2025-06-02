@@ -2,7 +2,7 @@ import cv2
 import os
 
 # --- Input and output paths ---
-input_path = '/Users/jamescrall/Downloads/fcage3_2025-05-13_18-00-01_ext1.h264'
+input_path = '/Users/jamescrall/Downloads/RNAi CAM/sicb_pi_2025-04-29_17-30-01_ext1.h264'
 output_path = input_path.replace('.h264', '.mp4')
 
 # --- Desired output parameters ---

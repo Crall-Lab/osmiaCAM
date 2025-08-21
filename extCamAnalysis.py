@@ -12,9 +12,9 @@ Only tested on data from /Volumes/OSMIACAM_2/Osmia_cameras/osmia3/OsmiaVids/extC
 #labels
 labels = json.load(open('/Volumes/OSMIACAM_2/Osmia_cameras/osmia3/OsmiaVids/extCam/05_09_25/osmia3_2025-05-09.json'))
 nests = labels['shapes']
-filename = '/Volumes/OSMIACAM_2/Osmia_cameras/osmia3/OsmiaVids/extCam/05_09_25/osmia3_2025-05-09_07-10-01_ext1.h264'
+#filename = '/Volumes/OSMIACAM_2/Osmia_cameras/osmia3/OsmiaVids/extCam/05_09_25/osmia3_2025-05-09_08-00-01_ext1.h264'
 
-def oneVid(filename):
+def oneVid(filename, outDir):
     print(filename)
     #output
     out = None
@@ -45,6 +45,11 @@ def oneVid(filename):
             bee = light-mid > 90
             toTrue = [i for i in range(1,len(bee)) if bee[i] and not bee[i-1]]
             toFalse = [i for i in range(len(bee)-1) if bee[i] and not bee[i+1]]
+            if bee[0] == True:
+                toTrue = [0]+toTrue
+            if bee[-1] == True:
+                toFalse += [0]
+
             if len(toTrue) == 0:
                 cnt += 1
                 continue
@@ -76,6 +81,7 @@ def oneVid(filename):
                         cv2.rectangle(frame,(xs[0], ys[0]+ymin),(xs[1], ys[0]+ymax),(0,255,0),3)
                         if out is None:
                             out = row
+                            break
                         else:
                             out = pd.concat([out, row])
                             break
@@ -89,16 +95,25 @@ def oneVid(filename):
 
     cap.release()
     cv2.destroyAllWindows()
-    out.columns = ('filename', 'frame', 'nestLabel', 'centroid')
+    if out is not None:
+        out.columns = ('filename', 'frame', 'nestLabel', 'centroid')
+        out.to_csv(os.path.join(outDir,os.path.basename(filename).replace('.h264', '_obv.csv')), index=False)
+    else:
+        noneOut = pd.DataFrame(columns = ['path', 'start', 'end', 'nestLabel', 'dir'])
+        noneOut.to_csv(os.path.join(outDir, os.path.basename(filename).replace('h264', 'csv')), index=False)
     return out
 
 #folder
-folder = '/Volumes/OSMIACAM_2/Osmia_cameras/osmia3/OsmiaVids/extCam/05_09_25'
-def runDay(folder):
-    out = None
+def runDay(folder, outDir):
+    #out = None
     for filename in glob.glob(os.path.join(folder,'*.h264')):
+        if os.path.isfile(os.path.join(outDir, os.path.basename(filename).replace('h264', 'csv'))):
+            print('Done, skipping')
+            continue
         oneOut = None
-        oneIn = oneVid(filename)
+        oneIn = oneVid(filename, outDir)
+        if oneIn is None:
+            continue
         for n in set(oneIn.nestLabel):
             subset = oneIn[oneIn['nestLabel'] == n]
             subout = pd.DataFrame()
@@ -124,16 +139,20 @@ def runDay(folder):
             if oneOut is None:
                 oneOut = subout
             else:
-                oneOut = pd.concat([out, subout])
-            oneOut.to_csv(os.path.basename(filename).replace('h264', 'csv'))
+                oneOut = pd.concat([oneOut, subout])
+            oneOut.to_csv(os.path.join(outDir, os.path.basename(filename).replace('h264', 'csv')), index=False)
 
+    out = None
+    for csv in glob.glob(os.path.join(outDir, 'osmia*ext1.csv')):
+        oneOut = pd.read_csv(csv)
         if out is None:
             out = oneOut
         else:
             out = pd.concat([out, oneOut])
-        out.to_csv(os.path.basename(folder)+'.csv')
+        out.to_csv(os.path.join(outDir, os.path.basename(folder)+'.csv'), index=False)
 
-            
-runDay(folder)
+outDir = '/Volumes/OSMIACAM_2/Results/05_29_25'
+folder = '/Volumes/OSMIACAM_2/Osmia_cameras/osmia3/OsmiaVids/extCam/05_09_25'          
+runDay(folder, outDir)
 
 #TO-DO: ask for user input for where are the nests. For now, just working with the output from labelme.

@@ -1,0 +1,117 @@
+---
+title: "oCAM 05092025 data2"
+output: html_document
+date: "2025-08-27"
+---
+
+```{r}
+#setwd("Users/vasalerno/Desktop/oCAM data")
+setwd("/Users/jamescrall/Documents/GitHub/osmiaCAM/analysis")
+```
+
+```{r}
+install.packages(c("rmarkdown","knitr"))
+```
+
+
+```{r}
+setwd("/Users/jamescrall/Documents/GitHub/osmiaCAM/analysis")
+data <- read.csv("05_09_25.csv")
+View(data)
+
+rm(list = ls()) #Remove all variable from workspace
+```
+
+
+```{r}
+extract_from_path <- function(paths) {
+  # Apply the extraction to each path
+  df_list <- lapply(paths, function(path) {
+    # Split path by "/"
+    parts <- strsplit(path, "/")[[1]]
+    # Extract the unit (5th part of the path)
+    unit <- parts[5]
+    # Split the filename (9th part) by "_" to get date and time
+    filename_parts <- strsplit(parts[9], "_")[[1]]
+    date <- filename_parts[2]
+    time <- filename_parts[3]
+    # Return a data frame for this path
+    data.frame(
+      unit = unit,
+      date = date,
+      time = time,
+      stringsAsFactors = FALSE
+    )
+  })
+  # Combine all rows into one data frame
+  df <- do.call(rbind, df_list)
+  return(df)
+}
+```
+
+
+```{r}
+df_components <- extract_from_path(data$path)
+
+df_components
+View(df_components)
+```
+
+
+
+```{r}
+
+df_full <- cbind(data, df_components)
+
+head(df_full)
+#View(df_full)
+```
+```{r}
+#install.packages("lubridate")
+#install.packages("tidyverse")
+#install.packages("hms")
+
+fps <- 15
+df_full <- df_full %>%
+    mutate(
+        start_num = (start / fps) / (1440*60) ,
+        end_num   = (end / fps) / (1440*60)  ,
+)
+```
+
+```{r fresh start on datetime!}
+ref_time <- '2025-01-01_00-00-00'
+df_full$datestr <- paste(df_full$date, df_full$time, sep = '_') #Make single entry for date string
+
+ref_time_num <- parse_date_time(ref_time, 'ymd HMS') #Parse timestamp for reference
+
+df_full$datenum <- parse_date_time(df_full$datestr, 'ymd HMS') #Parse timestamps
+
+df_full$datenum <- as.numeric(difftime(df_full$datenum, ref_time_num, units = 'days')) #Convert timestamps to numeric value relative to reference
+
+df_full$start_time <- df_full$datenum + df_full$start_num  
+df_full$end_time <- df_full$datenum + df_full$end_num  
+
+```
+
+
+
+
+```{r}
+#install.packages("ggplot2")
+#install.packages("tidyverse")
+library("tidyverse")
+library(ggplot2)
+ggplot(df_full, aes(y = nestLabel, color = dir)) +
+  geom_point(aes(x = start_time, xend = end_time, yend = nestLabel)) +
+  labs(
+    title = "Nest Entrance Movement 05.09.2025 - Osmia3",
+    x = "Time (Julian Days)",
+    y = "Nest Tunnel",
+    color = "Direction"
+  ) +
+  theme_minimal() + xlim(128.3, 128.4)
+
+
+```
+

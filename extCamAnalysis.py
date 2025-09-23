@@ -6,21 +6,24 @@ import glob
 import os
 
 """
-Only tested on data from /Volumes/OSMIACAM_2/Osmia_cameras/osmia3/OsmiaVids/extCam/05_09_25.
+Only tested on data from ../Osmia_cameras/osmia3/OsmiaVids/extCam/05_09_25.
 """
 
 #labels
-labels = json.load(open('/Volumes/OSMIACAM_2/Osmia_cameras/osmia3/OsmiaVids/extCam/05_09_25/osmia3_2025-05-09.json'))
+labels = json.load(open('../Osmia_cameras/osmia3/OsmiaVids/extCam/05_09_25/osmia3_2025-05-09.json'))
 nests = labels['shapes']
-#filename = '/Volumes/OSMIACAM_2/Osmia_cameras/osmia3/OsmiaVids/extCam/05_09_25/osmia3_2025-05-09_08-00-01_ext1.h264'
+#filename = '../Osmia_cameras/osmia3/OsmiaVids/extCam/05_09_25/osmia3_2025-05-09_08-00-01_ext1.h264'
 
-def oneVid(filename, outDir):
+def oneVid(filename, outDir, write=False):
     print(filename)
     #output
     out = None
     
     #read video
     cap = cv2.VideoCapture(filename)
+    if write:
+        fourcc = cv2.VideoWriter_fourcc(*'MP4')
+        outVid = cv2.VideoWriter('output.mp4', fourcc, 30.0, (cap.get(cv2.CAP_PROP_FRAME_WIDTH),  cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
     f = 0
     while cap.isOpened():
         print(f)
@@ -60,7 +63,8 @@ def oneVid(filename, outDir):
                 if ymax-ymin > 50:
                     print('Found one!')
                     row = pd.DataFrame([[filename, f, cnt,  ys[0]+ymin+(ymax-ymin)/2]])
-                    cv2.rectangle(frame,(xs[0], ys[0]+ymin),(xs[1], ys[0]+ymax),(0,255,0),3)
+                    if write:
+                        cv2.rectangle(frame,(xs[0], ys[0]+ymin),(xs[1], ys[0]+ymax),(0,255,0),3)
 
                 cnt += 1
                 continue
@@ -78,7 +82,9 @@ def oneVid(filename, outDir):
                             i += 1
                         ymax = toFalse[i]
                         row = pd.DataFrame([[filename, f, cnt,  ys[0]+ymin+(ymax-ymin)/2]])
-                        cv2.rectangle(frame,(xs[0], ys[0]+ymin),(xs[1], ys[0]+ymax),(0,255,0),3)
+                        if write:
+                            cv2.rectangle(frame,(xs[0], ys[0]+ymin),(xs[1], ys[0]+ymax),(0,255,0),3)
+                        
                         if out is None:
                             out = row
                             break
@@ -88,13 +94,18 @@ def oneVid(filename, outDir):
                     i += 1
                     break #should not need this but alas
             cnt += 1
+        
+        if write:
+            outVid.write(frame)
         f += 1
         
         if cv2.waitKey(1) == ord('q'):
             break
 
     cap.release()
+    outVid.releast()
     cv2.destroyAllWindows()
+    
     if out is not None:
         out.columns = ('filename', 'frame', 'nestLabel', 'centroid')
         out.to_csv(os.path.join(outDir,os.path.basename(filename).replace('.h264', '_obv.csv')), index=False)
@@ -105,13 +116,16 @@ def oneVid(filename, outDir):
 
 #folder
 def runDay(folder, outDir):
-    #out = None
+    cnt=0
     for filename in glob.glob(os.path.join(folder,'*.h264')):
         if os.path.isfile(os.path.join(outDir, os.path.basename(filename).replace('h264', 'csv'))):
             print('Done, skipping')
             continue
         oneOut = None
-        oneIn = oneVid(filename, outDir)
+        if cnt%10 == 0: #write every 10th
+            oneIn = oneVid(filename, outDir, True)
+        else:
+            oneIn = oneVid(filename, outDir)
         if oneIn is None:
             continue
         for n in set(oneIn.nestLabel):
@@ -124,7 +138,7 @@ def runDay(folder, outDir):
             subout['start'] = start
             subout['end'] = end
             subout['nestLabel'] = n
-            centroids = list(subset.centroid)
+            #centroids = list(subset.centroid)
             dir = []
             for i in range(len(end)):
                 vector = subset[subset['frame'] == end[i]].centroid[0]-subset[subset['frame'] == start[i]].centroid[0]
@@ -151,8 +165,10 @@ def runDay(folder, outDir):
             out = pd.concat([out, oneOut])
         out.to_csv(os.path.join(outDir, os.path.basename(folder)+'.csv'), index=False)
 
-outDir = '/Volumes/OSMIACAM_2/Results/05_29_25'
-folder = '/Volumes/OSMIACAM_2/Osmia_cameras/osmia3/OsmiaVids/extCam/05_09_25'          
-runDay(folder, outDir)
+
+for folder in glob.glob('../Osmia_cameras/osmia3/OsmiaVids/extCam/*'):
+    base = os.path.basename(folder)
+    outDir = '../Results/' + base       
+    runDay(folder, outDir)
 
 #TO-DO: ask for user input for where are the nests. For now, just working with the output from labelme.

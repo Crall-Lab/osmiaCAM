@@ -22,8 +22,8 @@ def oneVid(filename, outDir, write=False):
     #read video
     cap = cv2.VideoCapture(filename)
     if write:
-        fourcc = cv2.VideoWriter_fourcc(*'MP4')
-        outVid = cv2.VideoWriter('output.mp4', fourcc, 30.0, (cap.get(cv2.CAP_PROP_FRAME_WIDTH),  cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
+        fourcc = cv2.VideoWriter_fourcc(*'MP4V')
+        outVid = cv2.VideoWriter('output.mp4', fourcc, 30.0, (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),  int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))))
     f = 0
     while cap.isOpened():
         print(f)

@@ -7,6 +7,7 @@ import os
 
 """
 Only tested on data from ../Osmia_cameras/osmia3/OsmiaVids/extCam/05_09_25.
+Run from code directory held within the same parent as data directory and 'Results' directory
 """
 
 #labels
@@ -171,7 +172,9 @@ def runDay(folder, outDir):
 
 for folder in glob.glob('../Osmia_cameras/osmia3/OsmiaVids/extCam/*'):
     base = os.path.basename(folder)
-    outDir = '../Results/' + base       
+    outDir = '../Results/' + base
+    if not os.path.exists(outDir):
+        os.mkdir(outDir)
     runDay(folder, outDir)
 
 #TO-DO: ask for user input for where are the nests. For now, just working with the output from labelme.

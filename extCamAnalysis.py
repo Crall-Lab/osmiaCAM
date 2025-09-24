@@ -10,11 +10,11 @@ Only tested on data from ../Osmia_cameras/osmia3/OsmiaVids/extCam/05_09_25.
 """
 
 #labels
-labels = json.load(open('../Osmia_cameras/osmia3/OsmiaVids/extCam/05_09_25/osmia3_2025-05-09.json'))
-nests = labels['shapes']
+#labels = json.load(open('../Osmia_cameras/osmia3/OsmiaVids/extCam/05_09_25/osmia3_2025-05-09.json'))
+#nests = labels['shapes']
 #filename = '../Osmia_cameras/osmia3/OsmiaVids/extCam/05_09_25/osmia3_2025-05-09_08-00-01_ext1.h264'
 
-def oneVid(filename, outDir, write=False):
+def oneVid(filename, outDir, nests, write=False):
     print(filename)
     #output
     out = None
@@ -117,15 +117,18 @@ def oneVid(filename, outDir, write=False):
 #folder
 def runDay(folder, outDir):
     cnt=0
+    jsonName = glob.glob(os.path.join([folder, '*.json']))[0]
+    labels = json.load(open('jsonName'))
+    nests = labels['shapes']
     for filename in glob.glob(os.path.join(folder,'*.h264')):
         if os.path.isfile(os.path.join(outDir, os.path.basename(filename).replace('h264', 'csv'))):
             print('Done, skipping')
             continue
         oneOut = None
         if cnt%10 == 0: #write every 10th
-            oneIn = oneVid(filename, outDir, True)
+            oneIn = oneVid(filename, outDir, nests, True)
         else:
-            oneIn = oneVid(filename, outDir)
+            oneIn = oneVid(filename, outDir, nests, False)
         if oneIn is None:
             continue
         for n in set(oneIn.nestLabel):

@@ -103,7 +103,7 @@ def oneVid(filename, outDir, write=False):
             break
 
     cap.release()
-    outVid.releast()
+    outVid.release()
     cv2.destroyAllWindows()
     
     if out is not None:

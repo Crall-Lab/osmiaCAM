@@ -136,6 +136,7 @@ def runDay(folder, outDir):
             oneIn = oneVid(filename, outDir, nests, True)
         else:
             oneIn = oneVid(filename, outDir, nests, False)
+        cnt += 1
         if oneIn is None:
             continue
         for n in set(oneIn.nestLabel):

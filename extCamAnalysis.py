@@ -6,8 +6,8 @@ import glob
 import os
 
 """
-Only tested on data from ../Osmia_cameras/osmia3/OsmiaVids/extCam/05_09_25.
-Run from code directory held within the same parent as data directory and 'Results' directory
+Only tested with one single labelme JSON.
+Run from code directory held within the same parent as data directory and 'Results' directory.
 """
 
 #labels
@@ -24,7 +24,7 @@ def oneVid(filename, outDir, nests, write=False):
     cap = cv2.VideoCapture(filename)
     if write:
         fourcc = cv2.VideoWriter_fourcc(*'MP4V')
-        outVid = cv2.VideoWriter('output.mp4', fourcc, 30.0, (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),  int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))))
+        outVid = cv2.VideoWriter(os.path.join(outDir, os.path.basename(filename).replace('.h264', 'bees_.mp4')), fourcc, 30.0, (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),  int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))))
     f = 0
     while cap.isOpened():
         print(f)
@@ -118,8 +118,14 @@ def oneVid(filename, outDir, nests, write=False):
 #folder
 def runDay(folder, outDir):
     cnt=0
-    jsonName = glob.glob(os.path.join([folder, '*.json']))[0]
-    labels = json.load(open('jsonName'))
+    jsonName = glob.glob(os.path.join(folder, '*.json'))
+    #take me out
+    if len(jsonName) == 0:
+        jsonName = '../Osmia_cameras/osmia3/OsmiaVids/extCam/05_09_25/osmia3_2025-05-09.json'
+    else:
+        jsonName = jsonName[0]
+    #
+    labels = json.load(open(jsonName))
     nests = labels['shapes']
     for filename in glob.glob(os.path.join(folder,'*.h264')):
         if os.path.isfile(os.path.join(outDir, os.path.basename(filename).replace('h264', 'csv'))):
@@ -176,5 +182,3 @@ for folder in glob.glob('../Osmia_cameras/osmia3/OsmiaVids/extCam/*'):
     if not os.path.exists(outDir):
         os.mkdir(outDir)
     runDay(folder, outDir)
-
-#TO-DO: ask for user input for where are the nests. For now, just working with the output from labelme.

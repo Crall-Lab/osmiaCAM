@@ -166,6 +166,7 @@ def runDay(folder, outDir):
             else:
                 oneOut = pd.concat([oneOut, subout])
             oneOut.to_csv(os.path.join(outDir, os.path.basename(filename).replace('h264', 'csv')), index=False)
+        cnt += 1
 
     out = None
     for csv in glob.glob(os.path.join(outDir, 'osmia*ext1.csv')):

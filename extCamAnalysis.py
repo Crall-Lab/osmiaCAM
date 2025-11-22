@@ -11,6 +11,7 @@ Untested, please fine tune parameters (Commented, dark/light difference, mostly.
 """
 
 JSONfolder = '/Volumes/crall2/Crall_Lab/osmia_2025/oCAM_ROIs_CA2025' #Change me as needed, but if you change the folder structure be prepared to go on an adventure.
+vidDir = '/Volumes/crall2/Crall_Lab/osmia_2025/OsmiaCam_Data/Osmia_cameras/*'
 
 def oneVid(filename, outDir, jsonDir, write=False):
     """
@@ -194,7 +195,7 @@ def runDay(folder, outDir, jsonDir):
         out.to_csv(os.path.join(outDir, os.path.basename(folder)+'.csv'), index=False)
 
 
-for folder in glob.glob('/Volumes/crall2/Crall_Lab/osmia_2025/OsmiaCam_Data/Osmia_cameras/*'): #Change the folder structure if (and only if) you want to try string manipulation. It'll be fun, or maybe not but hey, YOLO
+for folder in glob.glob(vidDir): #Change the folder structure if (and only if) you want to try string manipulation. It'll be fun, or maybe not but hey, YOLO
     if os.path.isdir(folder):
         base = os.path.basename(folder)
         jsonDir = os.path.join(JSONfolder, base+'_ROI')

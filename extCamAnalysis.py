@@ -142,7 +142,6 @@ def runDay(folder, outDir, jsonDir):
     """
 
     cnt=0
-
     for filename in glob.glob(os.path.join(folder,'*.h264')):
         if os.path.isfile(os.path.join(outDir, os.path.basename(filename).replace('h264', 'csv'))):
             print('Done, skipping')
@@ -152,7 +151,7 @@ def runDay(folder, outDir, jsonDir):
             oneIn = oneVid(filename, outDir, jsonDir, True)
         else:
             oneIn = oneVid(filename, outDir, jsonDir, False)
-        cnt += 1
+            
         if oneIn is None:
             print('OUTPUT EMPTY')
             continue

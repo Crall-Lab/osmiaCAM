@@ -2,7 +2,8 @@ import cv2
 import os
 
 # --- Folder containing all .h264 files ---
-input_folder = '/Users/jamescrall/Downloads/04_18_25-selected'
+#input_folder = '/Users/jamescrall/Downloads/04_18_25-selected'
+input_folder = '/Users/jamescrall/Downloads/drive-download-20250903T152546Z-1-001'
 
 # --- Desired output parameters ---
 output_fps = 15

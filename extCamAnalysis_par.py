@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import glob
 import os
+from concurrent.futures import ProcessPoolExecutor
 
 """
 Run on all data.
@@ -49,7 +50,7 @@ def oneVid(filename, outDir, jsonDir, write=False):
         outVid = cv2.VideoWriter(os.path.join(outDir, os.path.basename(filename).replace('.h264', 'bees_.mp4')), fourcc, 30.0, (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),  int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))))
     f = 0
     while cap.isOpened():
-        print(f)
+        #print(f)
         ret, raw = cap.read()
     
         if not ret:
@@ -206,17 +207,37 @@ def runDay(folder, outDir, jsonDir):
         out.to_csv(os.path.join(outDir, os.path.basename(folder)+'.csv'), index=False)
 
 
-for folder in glob.glob(vidDir): #Change the folder structure if (and only if) you want to try string manipulation. It'll be fun, or maybe not but hey, YOLO
-    if os.path.isdir(folder):
-        base = os.path.basename(folder)
-        jsonDir = os.path.join(JSONfolder, base+'_ROI')
-        if not os.path.exists(outMainDir):
-            os.mkdir(outMainDir)
-        if os.path.exists(jsonDir):
-            outDir = os.path.join(outMainDir, base) #Results will be in wd.
-            if not os.path.exists(outDir):
-                os.mkdir(outDir)
-            for day in glob.glob(os.path.join(folder, 'OsmiaVids', 'extCam', '*')): #change if starting lower
-                runDay(day, outDir, jsonDir)
-        else:
-            print('Where are the ROI files for '+base+'?')
+def process_folder(folder):
+    """
+    Process one top-level camera folder (runs all days for that camera).
+    This is what we'll run in parallel.
+    """
+    if not os.path.isdir(folder):
+        return
+
+    base = os.path.basename(folder)
+    jsonDir = os.path.join(JSONfolder, base + '_ROI')
+
+    # Make result root if needed
+    if not os.path.exists(outMainDir):
+        os.mkdir(outMainDir)
+
+    if os.path.exists(jsonDir):
+        outDir = os.path.join(outMainDir, base)  # Results will be in this folder
+        if not os.path.exists(outDir):
+            os.mkdir(outDir)
+
+        for day in glob.glob(os.path.join(folder, 'OsmiaVids', 'extCam', '*')):  # change if starting lower
+            runDay(day, outDir, jsonDir)
+    else:
+        print('Where are the ROI files for ' + base + '?')
+
+#Parallel processing across folders
+if __name__ == '__main__':
+    folders = [f for f in glob.glob(vidDir) if os.path.isdir(f)]
+
+    # Adjust max_workers to number of cores you want to use
+    max_workers = min(4, len(folders))  # e.g., use 4 processes or fewer if <4 folders
+
+    with ProcessPoolExecutor(max_workers=max_workers) as executor:
+        list(executor.map(process_folder, folders))

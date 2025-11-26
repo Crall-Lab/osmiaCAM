@@ -12,6 +12,7 @@ Untested, please fine tune parameters (Commented, dark/light difference, mostly.
 
 JSONfolder = '/Volumes/crall2/Crall_Lab/osmia_2025/oCAM_ROIs_CA2025' #Change me as needed, but if you change the folder structure be prepared to go on an adventure.
 vidDir = '/Volumes/crall2/Crall_Lab/osmia_2025/OsmiaCam_Data/Osmia_cameras/*'
+outMainDir = '/Volumes/crall2/Crall_Lab/osmia_2025/Results'
 
 def oneVid(filename, outDir, jsonDir, write=False):
     """
@@ -201,10 +202,10 @@ for folder in glob.glob(vidDir): #Change the folder structure if (and only if) y
     if os.path.isdir(folder):
         base = os.path.basename(folder)
         jsonDir = os.path.join(JSONfolder, base+'_ROI')
-        if not os.path.exists('Results'):
-            os.mkdir('Results')
+        if not os.path.exists(outMainDir):
+            os.mkdir(outMainDir)
         if os.path.exists(jsonDir):
-            outDir = 'Results/' + base #Results will be in wd.
+            outDir = os.path.join(outMainDir, base) #Results will be in wd.
             if not os.path.exists(outDir):
                 os.mkdir(outDir)
             for day in glob.glob(os.path.join(folder, 'OsmiaVids', 'extCam', '*')): #change if starting lower

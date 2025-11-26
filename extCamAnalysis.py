@@ -189,7 +189,7 @@ def runDay(folder, outDir, jsonDir):
         cnt += 1
 
     out = None
-    for csv in glob.glob(os.path.join(outDir, 'osmia*ext1.csv')):
+    for csv in glob.glob(os.path.join(outDir, '*ext1.csv')):
         oneOut = pd.read_csv(csv)
         if out is None:
             out = oneOut

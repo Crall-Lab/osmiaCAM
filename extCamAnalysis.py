@@ -128,7 +128,7 @@ def oneVid(filename, outDir, jsonDir, write=False):
     cv2.destroyAllWindows()
     
     if out is not None:
-        out.columns = ('filename', 'frame', 'nestLabel', 'beeStart', , 'beeEnd', 'centroid')
+        out.columns = ('filename', 'frame', 'nestLabel', 'beeStart', 'beeEnd', 'centroid')
         out.to_csv(os.path.join(outDir,os.path.basename(filename).replace('.h264', '_obv.csv')), index=False)
     else:
         noneOut = pd.DataFrame(columns = ['path', 'start', 'end', 'nestLabel', 'dir'])
@@ -143,6 +143,7 @@ def runDay(folder, outDir, jsonDir):
 
     cnt=0
     for filename in glob.glob(os.path.join(folder,'*.h264')):
+        print(filename)
         if os.path.isfile(os.path.join(outDir, os.path.basename(filename).replace('h264', 'csv'))):
             print('Done, skipping')
             continue
@@ -155,7 +156,9 @@ def runDay(folder, outDir, jsonDir):
         if oneIn is None:
             print('OUTPUT EMPTY')
             continue
+        
         for n in set(oneIn.nestLabel):
+            print(n)
             subset = oneIn[oneIn['nestLabel'] == n]
             subout = pd.DataFrame()
             frames = list(subset.frame)
@@ -166,16 +169,16 @@ def runDay(folder, outDir, jsonDir):
             subout['end'] = end
             subout['nestLabel'] = n
             #centroids = list(subset.centroid)
-            dir = []
+            direction = []
             for i in range(len(end)):
                 vector = subset[subset['frame'] == end[i]].centroid[0]-subset[subset['frame'] == start[i]].centroid[0]  #top left is 0,0
                 if vector == 0:
-                    dir.append('still')
+                    direction.append('still')
                 elif vector < 0:  #any movement up
-                    dir.append('in')
+                    direction.append('in')
                 else:
-                    dir.append('out')
-            subout['dir'] = dir
+                    direction.append('out')
+            subout['dir'] = direction
             subout['path'] = filename
             if oneOut is None:
                 oneOut = subout
@@ -204,9 +207,7 @@ for folder in glob.glob(vidDir): #Change the folder structure if (and only if) y
             outDir = 'Results/' + base #Results will be in wd.
             if not os.path.exists(outDir):
                 os.mkdir(outDir)
-
             for day in glob.glob(os.path.join(folder, 'OsmiaVids', 'extCam', '*')): #change if starting lower
-                
                 runDay(day, outDir, jsonDir)
         else:
             print('Where are the ROI files for '+base+'?')

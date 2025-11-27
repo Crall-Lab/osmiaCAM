@@ -219,10 +219,6 @@ def process_folder(folder):
     base = os.path.basename(folder)
     jsonDir = os.path.join(JSONfolder, base + '_ROI')
 
-    # Make result root if needed
-    if not os.path.exists(outMainDir):
-        os.mkdir(outMainDir)
-
     if os.path.exists(jsonDir):
         outDir = os.path.join(outMainDir, base)  # Results will be in this folder
         if not os.path.exists(outDir):
@@ -235,6 +231,9 @@ def process_folder(folder):
 
 #Parallel processing across folders
 if __name__ == '__main__':
+    # Make result root if needed
+    if not os.path.exists(outMainDir):
+        os.mkdir(outMainDir)
     folders = [f for f in glob.glob(vidDir) if os.path.isdir(f)]
 
     # Adjust max_workers to number of cores you want to use

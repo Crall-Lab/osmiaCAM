@@ -132,7 +132,8 @@ def oneVid(filename, outDir, jsonDir, write=False):
             break
 
     cap.release()
-    outVid.release()
+    if write:
+        outVid.release()
     cv2.destroyAllWindows()
     
     if out is not None:

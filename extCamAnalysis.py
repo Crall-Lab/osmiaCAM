@@ -80,7 +80,7 @@ def oneVid(filename, outDir, jsonDir, write=False):
             if bee[0] == True:
                 toTrue = [0]+toTrue
             if bee[-1] == True:
-                toFalse += [0]
+                toFalse += [len(bee)]
 
             if len(toTrue) == 0:
                 cnt += 1

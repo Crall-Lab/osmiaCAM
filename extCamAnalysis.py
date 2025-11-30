@@ -21,7 +21,7 @@ JSONfolder = '/Volumes/crall2/Crall_Lab/osmia_2025/oCAM_ROIs_CA2025' #Change me 
 vidDir = '/Volumes/crall2/Crall_Lab/osmia_2025/oCAM_subset_test/Osmia_cameras/*'
 outMainDir = '/Volumes/crall2/Crall_Lab/osmia_2025/Results_subset_29112025'
 
-def oneVid(filename, outDir, jsonDir, write=False):
+def oneVid(filename, outDir, jsonDir):
     """
     Analyse one video. fine tune me.
     """
@@ -42,93 +42,69 @@ def oneVid(filename, outDir, jsonDir, write=False):
     
     #read video
     cap = cv2.VideoCapture(filename)
-    if write:
-        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-        outVid = cv2.VideoWriter(os.path.join(outDir, os.path.basename(filename).replace('.h264', 'bees_.mp4')), fourcc, 30.0, (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),  int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))))
     f = 0
     while cap.isOpened():
-        #print(f)
-        ret, raw = cap.read()
-    
-        if not ret:
-            print("End of video.")
-            break
+        cnt = 0
+        holder = []
+        while cnt < 25:
+            ret, raw = cap.read()
+            if not ret:
+                print("End of video.")
+                break
+            
+            gray = cv2.cvtColor(raw, cv2.COLOR_BGR2GRAY)#equalise globally
+
+            holder.append(cv2.equalizeHist(gray))
+            cnt += 1
         
-        gray = cv2.cvtColor(raw, cv2.COLOR_BGR2GRAY)
-        frame = cv2.equalizeHist(gray) #equalise globally
-        
-        #For local
-        #clahe = cv.createCLAHE(tileGridSize=(8,8)) #play with grid size, if poor performance play with 
-        #frame = clahe.apply(gray)
+        stack = np.stack(holder, axis=2)
         
         #find bees based on darker colour, scanning along x-axis.
-        cnt = 0
-        for n in nests:
+        for cnt, n in enumerate(nests):
             [x1, y1], [x2, y2] = n['points']
             xs = [int(x1),int(x2)]
             ys = [int(y1),int(y2)]
             xs.sort()
             ys.sort()
-            crop = frame[ys[0]:ys[1], xs[0]:xs[1]]
+            crop = stack[ys[0]:ys[1], xs[0]:xs[1],:]
             light = np.percentile(crop, 90, axis = 1) #percentile to be "light"
             mid = np.percentile(crop, 50, axis = 1) #bee, basically
             bee = light-mid > 90 #how much darker is bee, probably change this
             bee = bee.astype('int')
-            if np.max(bee) == 0:
-                cnt += 1
-                continue
-            difference = np.diff(bee, prepend=False, append=False)
-            toTrue = np.where(difference == 1)[0]
-            toFalse = np.where(difference == -1)[0]
+            difference = np.diff(bee, prepend=False, append=False, axis=0)
+            toTrue = pd.DataFrame(np.where(difference == 1)).T
+            toTrue.columns = ['beeStart', 'frame']
+            toTrue.sort_values(['frame', 'beeStart'], inplace=True, ignore_index=True)
+            toFalse = pd.DataFrame(np.where(difference == -1)).T
+            toFalse.columns = ['beeEnd', 'frame2']
+            toFalse.sort_values(['frame2', 'beeEnd'], inplace=True, ignore_index=True)
 
-            if len(toTrue) == 1:
-                ymax = toFalse[0]
-                ymin = toTrue[0]
-                if ymax-ymin > 50: #size of bee
-                    print('Found one!')
-                    row = pd.DataFrame([[filename, f, cnt, ys[0]+ymin, ys[0]+ymax, ys[0]+ymin+(ymax-ymin)/2]]) #'filename', 'frame', 'nestLabel', 'beeStart', , 'beeEnd', 'centroid'
-                    if write:
-                        cv2.rectangle(raw,(xs[0], ys[0]+ymin),(xs[1], ys[0]+ymax),(0,255,0),3)
+            df = pd.concat([toTrue, toFalse], axis=1)
+            df.drop('frame2', axis=1, inplace=True)
+            df.frame += f
+            df['beeSize'] = df.beeEnd-df.beeStart
+            df['filename'] = filename
+            df['nestLabel'] = cnt
+            df['x0'] = xs[0]
+            df['x1'] = xs[1]
+            df['centroidY'] = ys[0]+df.beeStart+(df.beeEnd-df.beeStart)/2
 
-                cnt += 1
-                continue
+            maximums = df[['frame', 'beeSize']].groupby('frame')['beeSize'].idxmax().values
+            oneBee = df.loc[maximums]
+            
+            oneBee = oneBee[oneBee['beeSize'] > 50]
 
-            i=0
-            while i < len(toTrue): #more than on dark patch
-                if toFalse[i]-toTrue[i] < 50:
-                    i += 1
-                    pass
-                else:
-                    print('Found one!')
-                    while i < len(toTrue)-1:
-                        ymin = toTrue[i]
-                        if toFalse[i]-toTrue[i+1] < 50:  #size of bee
-                            i += 1
-                        ymax = toFalse[i]
-                        row = pd.DataFrame([[filename, f, cnt, ys[0]+ymin, ys[0]+ymax, ys[0]+ymin+(ymax-ymin)/2]])
-                        if write:
-                            cv2.rectangle(raw,(xs[0], ys[0]+ymin),(xs[1], ys[0]+ymax),(0,255,0),3)
-                        
-                        if out is None:
-                            out = row
-                            break
-                        else:
-                            out = pd.concat([out, row])
-                            break
-                    i += 1
-                    break #should not need this but alas
-            cnt += 1
-        
-        if write:
-            outVid.write(raw)
-        f += 1
-        
+            if out is None:
+                out = oneBee
+            else:
+                out = pd.concat([out, oneBee], ignore_index=True)
+
+        f += stack.shape[2]
+                
         if cv2.waitKey(1) == ord('q'):
             break
 
     cap.release()
-    if write:
-        outVid.release()
     cv2.destroyAllWindows()
     
     if out is not None:
@@ -170,6 +146,14 @@ def oneVid(filename, outDir, jsonDir, write=False):
         noneOut.to_csv(os.path.join(outDir, os.path.basename(filename).replace('h264', '_'+str(f)+'_motion.csv')), index=False)
     return out
 
+def write(filename, outDir, out):
+    cap = cv2.VideoCapture(filename)
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    outVid = cv2.VideoWriter(os.path.join(outDir, os.path.basename(filename).replace('.h264', 'bees_.mp4')), fourcc, 30.0, (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),  int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))))
+
+    #write video 
+    return 0
+
 for folder in glob.glob(vidDir): #Change the folder structure if (and only if) you want to try string manipulation. It'll be fun, or maybe not but hey, YOLO
     if os.path.isdir(folder):
         base = os.path.basename(folder)
@@ -186,7 +170,9 @@ for folder in glob.glob(vidDir): #Change the folder structure if (and only if) y
                     if len(glob.glob(os.path.join(outDir, os.path.basename(filename).split('.')[0]+'*'+'.csv'))) != 0:
                         print('Done, skipping')
                         continue
-                    oneVid(filename, outDir, jsonDir, True)
+                    out = oneVid(filename, outDir, jsonDir, True)
+                    if cnt % 10 == 0:
+                        write(filename, outDir, out)
                     cnt += 1
         else:
             print('Where are the ROI files for '+base+'?')

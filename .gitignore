@@ -2,3 +2,7 @@
 *.csv
 *.mp4
 *.png
+extCamAnalysis_stack_timeit.py
+extCamAnalysis_timeit.py
+*.json
+*.h264

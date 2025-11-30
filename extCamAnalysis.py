@@ -171,8 +171,8 @@ for folder in glob.glob(vidDir): #Change the folder structure if (and only if) y
                         print('Done, skipping')
                         continue
                     out = oneVid(filename, outDir, jsonDir, True)
-                    if cnt % 10 == 0:
-                        write(filename, outDir, out)
+                    #if cnt % 10 == 0:
+                    #    write(filename, outDir, out)
                     cnt += 1
         else:
             print('Where are the ROI files for '+base+'?')

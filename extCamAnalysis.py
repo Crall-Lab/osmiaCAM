@@ -18,8 +18,8 @@ pip3 install matplotlib==3.10.7 numpy==2.2.5 opencv.python==4.12.0.88 pandas==2.
 """
 
 JSONfolder = '/Volumes/crall2/Crall_Lab/osmia_2025/oCAM_ROIs_CA2025' #Change me as needed, but if you change the folder structure be prepared to go on an adventure.
-vidDir = '/Volumes/crall2/Crall_Lab/osmia_2025/OsmiaCam_Data/Osmia_cameras/*'
-outMainDir = '/Volumes/crall2/Crall_Lab/osmia_2025/Results_test'
+vidDir = '/Volumes/crall2/Crall_Lab/osmia_2025/oCAM_subset_test/Osmia_cameras/*'
+outMainDir = '/Volumes/crall2/Crall_Lab/osmia_2025/Results_subset_29112025'
 
 def oneVid(filename, outDir, jsonDir, write=False):
     """
@@ -30,8 +30,6 @@ def oneVid(filename, outDir, jsonDir, write=False):
     print(filename)
     bookmark = os.path.basename(filename).replace('h264', 'z')
 
-
-    
     jsons = os.listdir(jsonDir) + [bookmark]
     jsons.sort()
 
@@ -49,7 +47,7 @@ def oneVid(filename, outDir, jsonDir, write=False):
         outVid = cv2.VideoWriter(os.path.join(outDir, os.path.basename(filename).replace('.h264', 'bees_.mp4')), fourcc, 30.0, (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),  int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))))
     f = 0
     while cap.isOpened():
-        print(f)
+        #print(f)
         ret, raw = cap.read()
     
         if not ret:
@@ -75,16 +73,13 @@ def oneVid(filename, outDir, jsonDir, write=False):
             light = np.percentile(crop, 90, axis = 1) #percentile to be "light"
             mid = np.percentile(crop, 50, axis = 1) #bee, basically
             bee = light-mid > 90 #how much darker is bee, probably change this
-            toTrue = [i for i in range(1,len(bee)) if bee[i] and not bee[i-1]]
-            toFalse = [i for i in range(len(bee)-1) if bee[i] and not bee[i+1]]
-            if bee[0] == True:
-                toTrue = [0]+toTrue
-            if bee[-1] == True:
-                toFalse += [len(bee)]
-
-            if len(toTrue) == 0:
+            bee = bee.astype('int')
+            if np.max(bee) == 0:
                 cnt += 1
                 continue
+            difference = np.diff(bee, prepend=False, append=False)
+            toTrue = np.where(difference == 1)[0]
+            toFalse = np.where(difference == -1)[0]
 
             if len(toTrue) == 1:
                 ymax = toFalse[0]
@@ -138,38 +133,13 @@ def oneVid(filename, outDir, jsonDir, write=False):
     
     if out is not None:
         out.columns = ('filename', 'frame', 'nestLabel', 'beeStart', 'beeEnd', 'centroid')
-        out.to_csv(os.path.join(outDir,os.path.basename(filename).replace('.h264', '_obv.csv')), index=False)
-    else:
-        noneOut = pd.DataFrame(columns = ['path', 'start', 'end', 'nestLabel', 'dir'])
-        noneOut.to_csv(os.path.join(outDir, os.path.basename(filename).replace('h264', 'csv')), index=False)
-    return out
+        out.to_csv(os.path.join(outDir,os.path.basename(filename).replace('.h264', '_'+str(f)+'_obv.csv')), index=False)
 
-#folder
-def runDay(folder, outDir, jsonDir):
-    """
-    Run one camera-day. Should be fine unless you want to change how in and out is decided.
-    """
-
-    cnt=0
-    for filename in glob.glob(os.path.join(folder,'*.h264')):
-        print(filename)
-        if os.path.isfile(os.path.join(outDir, os.path.basename(filename).replace('h264', 'csv'))):
-            print('Done, skipping')
-            continue
         oneOut = None
-        if cnt%10 == 0: #write every 10th
-            oneIn = oneVid(filename, outDir, jsonDir, True)
-        else:
-            oneIn = oneVid(filename, outDir, jsonDir, False)
-            
-        if oneIn is None:
-            print('OUTPUT EMPTY')
-            continue
-        
-        for n in set(oneIn.nestLabel):
+        for n in set(out.nestLabel):
             if n % 500 == 0:
                 print(n)
-            subset = oneIn[oneIn['nestLabel'] == n]
+            subset = out[out['nestLabel'] == n]
             subout = pd.DataFrame()
             frames = list(subset.frame)
             start = [i for i in frames if i-1 not in frames]
@@ -194,18 +164,11 @@ def runDay(folder, outDir, jsonDir):
                 oneOut = subout
             else:
                 oneOut = pd.concat([oneOut, subout])
-            oneOut.to_csv(os.path.join(outDir, os.path.basename(filename).replace('h264', 'csv')), index=False)
-        cnt += 1
-
-    out = None
-    for csv in glob.glob(os.path.join(outDir, '*ext1.csv')):
-        oneOut = pd.read_csv(csv)
-        if out is None:
-            out = oneOut
-        else:
-            out = pd.concat([out, oneOut])
-        out.to_csv(os.path.join(outDir, os.path.basename(folder)+'.csv'), index=False)
-
+            oneOut.to_csv(os.path.join(outDir, os.path.basename(filename).replace('h264', '_'+str(f)+'_motion.csv')), index=False)
+    else:
+        noneOut = pd.DataFrame(columns = ['path', 'start', 'end', 'nestLabel', 'dir'])
+        noneOut.to_csv(os.path.join(outDir, os.path.basename(filename).replace('h264', '_'+str(f)+'_motion.csv')), index=False)
+    return out
 
 for folder in glob.glob(vidDir): #Change the folder structure if (and only if) you want to try string manipulation. It'll be fun, or maybe not but hey, YOLO
     if os.path.isdir(folder):
@@ -218,6 +181,12 @@ for folder in glob.glob(vidDir): #Change the folder structure if (and only if) y
             if not os.path.exists(outDir):
                 os.mkdir(outDir)
             for day in glob.glob(os.path.join(folder, 'OsmiaVids', 'extCam', '*')): #change if starting lower
-                runDay(day, outDir, jsonDir)
+                cnt=0
+                for filename in glob.glob(os.path.join(day,'*.h264')):
+                    if len(glob.glob(os.path.join(outDir, os.path.basename(filename).split('.')[0]+'*'+'.csv'))) != 0:
+                        print('Done, skipping')
+                        continue
+                    oneVid(filename, outDir, jsonDir, True)
+                    cnt += 1
         else:
             print('Where are the ROI files for '+base+'?')

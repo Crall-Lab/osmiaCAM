@@ -29,7 +29,6 @@ TARGET_CAMERAS = None      # e.g. ['osmia4']
 TARGET_DATES   = None      # e.g. ['04_09_25']
 MAX_WORKERS_PER_DAY = 4    # number of cores per day
 
-
 def process_video(args):
     """
     Helper to process a single video: runs oneVid, then summarises in/out

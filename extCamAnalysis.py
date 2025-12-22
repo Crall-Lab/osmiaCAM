@@ -60,7 +60,7 @@ def oneVid(filename, outDir, jsonDir):
         stack = np.stack(holder, axis=2)
         
         #find bees based on darker colour, scanning along x-axis.
-        for cnt, n in enumerate(nests):
+        for n in nests:
             [x1, y1], [x2, y2] = n['points']
             xs = [int(x1),int(x2)]
             ys = [int(y1),int(y2)]
@@ -84,7 +84,7 @@ def oneVid(filename, outDir, jsonDir):
             df.frame += f
             df['beeSize'] = df.beeEnd-df.beeStart
             df['filename'] = filename
-            df['nestLabel'] = cnt
+            df['nestLabel'] = n['label']
             df['x0'] = xs[0]
             df['x1'] = xs[1]
             df['centroidY'] = ys[0]+df.beeStart+(df.beeEnd-df.beeStart)/2

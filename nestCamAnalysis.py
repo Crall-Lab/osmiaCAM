@@ -5,13 +5,27 @@ import pandas as pd
 import glob
 import os
 
-#JSONfolder = '/Volumes/crall2/Crall_Lab/osmia_2025/oCAM_ROIs_CA2025' #Change me as needed, but if you change the folder structure be prepared to go on an adventure.
-#vidDir = '/Volumes/crall2/Crall_Lab/osmia_2025/OsmiaCam_Data/Osmia_cameras/*'
+def oneVid(filename, jsonDir, outDir):
+    print(filename)
+    
+    bookmark = os.path.basename(filename).replace('h264', 'z').replace('root', filename.split('/')[-5])
 
-jsonPath = 'osmia3_2025-04-04_13-54-22_nest0.json'
-outDir = 'Results'
+    jsons = os.listdir(jsonDir) + [bookmark]
+    jsons.sort()
 
-def oneDay(filename, nests):
+    if jsons.index(bookmark) == 0:
+        print('Missing ROI file for ' + filename)
+        return None
+    
+    jName = os.path.join(jsonDir, jsons[jsons.index(bookmark)-1])
+    outDir = os.path.join(outDir, os.path.basename(jName).split('.')[0])
+
+    if os.path.exists(os.path.join(outDir, os.path.basename(filename).replace('h264', '_nest.csv'))):
+        print('Done, skipping')
+        return 0
+
+    labels = json.load(open(jName))
+    nests = labels['shapes']
     backSub = cv2.createBackgroundSubtractorMOG2(history = 50, detectShadows = False)
     kernel = np.ones((5,5),np.uint8)
 
@@ -19,9 +33,13 @@ def oneDay(filename, nests):
 
     #read video
     cap = cv2.VideoCapture(filename)
+
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    outVid = cv2.VideoWriter(os.path.join(outDir, os.path.basename(filename).replace('.h264', '_bees.mp4')), fourcc, 30.0, (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),  int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))))
+
     f = 0
     while cap.isOpened():
-        print(f)
+        #print(f)
         ret, raw = cap.read()
 
         if not ret:
@@ -35,7 +53,7 @@ def oneDay(filename, nests):
 
         if opening.max() == 0 or opening.min() > 0:
             f += 1
-            cv2.imshow('',raw)
+            outVid.write(raw)
             continue
 
         for n in nests:
@@ -48,7 +66,7 @@ def oneDay(filename, nests):
             crop = opening[ys[0]:ys[1], xs[0]:xs[1]]
             
             if np.max(crop) > 0:
-                print('A bee!')
+                #print('A bee!')
             
                 contours, hierarchy = cv2.findContours(crop, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
                 combined = np.concat(contours)
@@ -57,10 +75,9 @@ def oneDay(filename, nests):
             
                 bees.loc[len(bees)] = [filename, f, n['label'], combined[:,:,0].min(), combined[:,:,0].max(), combined[:,:,1].min(), combined[:,:,1].max()]
                 cv2.rectangle(raw, (combined[:,:,0].min(), combined[:,:,1].min()), (combined[:,:,0].max(), combined[:,:,1].max()), (255,255,0), 3)
+                outVid.write(raw)
 
         f += 1
-        
-        cv2.imshow('',raw)
 
         if cv2.waitKey(1) == ord('q'):
             break
@@ -68,29 +85,18 @@ def oneDay(filename, nests):
     cap.release()
     cv2.destroyAllWindows()
 
-    bees.to_csv(filename.replace('h264', '_nest.csv'))
+    bees.to_csv(os.path.join(outDir, os.path.basename(filename).replace('h264', '_nest.csv')))
     return bees
 
+def nestEdge(resultDir):
+    return 0
 
-
-filename = 'osmia3_2025-04-04_15-27-02_nest0.h264'
-labels = json.load(open('osmia3_2025-04-04_13-54-22_nest0.json'))
-nests = labels['shapes']
+JSONfolder = '/Volumes/crall2/Crall_Lab/osmia_2025/nestROIs' #Change me as needed, but if you change the folder structure be prepared to go on an adventure.
+vidDir = '/Volumes/crall2/Crall_Lab/osmia_2025/oCAM_subset_test/Osmia_cameras/*'
+outMainDir = '/Volumes/crall2/Crall_Lab/osmia_2025/Results_nest_23122025'
 
 for folder in glob.glob(vidDir): #Change the folder structure if (and only if) you want to try string manipulation. It'll be fun, or maybe not but hey, YOLO
     if os.path.isdir(folder):
-        print(filename)
-        bookmark = os.path.basename(filename).replace('h264', 'z')
-
-        jsons = os.listdir(jsonDir) + [bookmark]
-        jsons.sort()
-
-        if jsons.index(bookmark) == 0:
-            print('Missing ROI file for ' + filename)
-            return None
-    
-    labels = json.load(open(os.path.join(jsonDir, jsons[jsons.index(bookmark)-1])))
-    nests = labels['shapes']
         base = os.path.basename(folder)
         jsonDir = os.path.join(JSONfolder, base+'_ROI')
         if not os.path.exists(outMainDir):
@@ -99,15 +105,13 @@ for folder in glob.glob(vidDir): #Change the folder structure if (and only if) y
             outDir = os.path.join(outMainDir, base) #Results will be in wd.
             if not os.path.exists(outDir):
                 os.mkdir(outDir)
-            for day in glob.glob(os.path.join(folder, 'OsmiaVids', 'extCam', '*')): #change if starting lower
-                cnt=0
-                for filename in glob.glob(os.path.join(day,'*.h264')):
-                    if len(glob.glob(os.path.join(outDir, os.path.basename(filename).split('.')[0]+'*'+'.csv'))) != 0:
-                        print('Done, skipping')
-                        continue
-                    out = oneVid(filename, outDir, jsonDir, True)
-                    #if cnt % 10 == 0:
-                    #    write(filename, outDir, out)
-                    cnt += 1
+            for j in glob.glob(jsonDir+'/*'):
+                if not os.path.exists(os.path.join(outDir, os.path.basename(j).split('.')[0])):
+                    os.mkdir(os.path.join(outDir, os.path.basename(j).split('.')[0]))
+
+            for filename in glob.glob(os.path.join(folder, 'OsmiaVids', 'nestCam', '*', '*.h264')):#+glob.glob((os.path.join(folder, 'OsmiaVids', 'nestCam', '*', '*.mjpeg'))):
+                oneVid(filename, jsonDir, outDir)
+
         else:
             print('Where are the ROI files for '+base+'?')
+            continue

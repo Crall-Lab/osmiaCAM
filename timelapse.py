@@ -9,13 +9,13 @@ cnt = 0
 
 JSONfolder = '/Volumes/crall2/Crall_Lab/osmia_2025/nestROIs' #Change me as needed, but if you change the folder structure be prepared to go on an adventure.
 vidDir = '/Volumes/crall2/Crall_Lab/osmia_2025/oCAM_subset_test/Osmia_cameras/*'
-outMainDir = '/Volumes/crall2/Crall_Lab/osmia_2025/Results_timelapse'
+outMainDir = '/Volumes/crall2/Crall_Lab/osmia_2025/Results_timelapse3'
 
 folders = glob.glob(vidDir)
 folders.sort()
 
-fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-outVid = cv2.VideoWriter('/Volumes/crall2/Crall_Lab/osmia_2025/Results_timelapse/timelapse22.mp4', fourcc, 60.0, (4060,  1400))
+#fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+#outVid = cv2.VideoWriter('/Volumes/crall2/Crall_Lab/osmia_2025/Results_timelapse/timelapse22.mp4', fourcc, 60.0, (4060,  1400))
 
 for folder in folders: #Change the folder structure if (and only if) you want to try string manipulation. It'll be fun, or maybe not but hey, YOLO
     if os.path.isdir(folder):
@@ -34,6 +34,7 @@ for folder in folders: #Change the folder structure if (and only if) you want to
             videos = glob.glob(os.path.join(folder, 'OsmiaVids', 'nestCam', '*', '*.h264'))
             videos.sort()
             for filename in videos:#+glob.glob((os.path.join(folder, 'OsmiaVids', 'nestCam', '*', '*.mjpeg'))):
+                print(filename)
                 bookmark = os.path.basename(filename).replace('h264', 'z').replace('root', filename.split('/')[-5])
 
                 jsons = os.listdir(jsonDir) + [bookmark]
@@ -76,7 +77,7 @@ for folder in folders: #Change the folder structure if (and only if) you want to
                         continue
 
                     for n in nests:
-                        if n['label'] != 22:
+                        if n['label'] != '22':
                             continue
                         #bees often moving, presence probably(?) too rare to ignore. Assume one bee
                         [x1, y1], [x2, y2] = n['points']
@@ -91,12 +92,13 @@ for folder in folders: #Change the folder structure if (and only if) you want to
                             combined = np.concat(contours)
                             combined[:,:,0] += xs[0]
                             combined[:,:,1] += ys[0]
-                        
-                            #bees.loc[len(bees)] = [filename, f, n['label'], combined[:,:,0].min(), combined[:,:,0].max(), combined[:,:,1].min(), combined[:,:,1].max()]
-                            cv2.rectangle(raw, (combined[:,:,0].min(), combined[:,:,1].min()), (combined[:,:,0].max(), combined[:,:,1].max()), (255,255,0), 3)
-                            outVid.write(raw)
-                            cv2.imwrite('/Volumes/crall2/Crall_Lab/osmia_2025/Results_timelapse/'+str(cnt)+'.png')
-                            cnt += 1
+                            if combined[:,:,1].max() > 100:
+                                print('yes!')
+                                #bees.loc[len(bees)] = [filename, f, n['label'], combined[:,:,0].min(), combined[:,:,0].max(), combined[:,:,1].min(), combined[:,:,1].max()]
+                                cv2.rectangle(raw, (combined[:,:,0].min(), combined[:,:,1].min()), (combined[:,:,0].max(), combined[:,:,1].max()), (255,255,0), 3)
+                                #outVid.write(raw)
+                                cv2.imwrite('/Volumes/crall2/Crall_Lab/osmia_2025/Results_timelapse2/'+str(cnt)+'.png', raw)
+                                cnt += 1
 
                     f += 1
 

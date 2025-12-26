@@ -6,7 +6,7 @@ import numpy as np
 
 df = None
 
-for f in glob.glob('/Volumes/crall2/Crall_Lab/osmia_2025/Results_nest_23122025/megachilidae/megachilidae_2025-04-07_07-12-02_nest0/*.csv'):
+for f in glob.glob('/Volumes/crall2/Crall_Lab/osmia_2025/Results_nestred_26122025/megachilidae/megachilidae_2025-04-07_07-12-02_nest0/*.csv'):
     new = pd.read_csv(f)
     if len(new.index) == 0:
         continue
@@ -30,10 +30,13 @@ colours = [cm(1.*i/NUM_COLORS) for i in range(NUM_COLORS)]
 fig, ax = plt.subplots()
 
 for c, n in enumerate(set(df['nestLabel'])):
+    #all = df[df['nestLabel'] == n]
+    #subset = all[all.yEnd >100]
     subset = df[df['nestLabel'] == n]
     ax.scatter(subset['time'], subset['yEnd'], alpha=0.5, color=colours[c])
 
     ax.legend(set(df['nestLabel']), bbox_to_anchor=(1.1, 1))
+    ax.set(ylim=(0, 1400))
 
 plt.show()
 
@@ -45,11 +48,14 @@ fig, ax = plt.subplots()
 
 for c, n in enumerate(set(df['nestLabel'])):
     subset = df[df['nestLabel'] == n]
+    #subset = all[all.yEnd >100]
     byTime = subset.set_index(subset.time)
     byTime = byTime.sort_index(ascending=False)
     byTime['max'] = byTime['yEnd'].cummax() #yEnd > yStart
     ax.scatter(byTime['time'], byTime['max'], alpha=0.5, color=colours[c])
+    ax.set(ylim=(0, 1400))
 
     ax.legend(set(df['nestLabel']), bbox_to_anchor=(1.1, 1))
 
 plt.show()
+

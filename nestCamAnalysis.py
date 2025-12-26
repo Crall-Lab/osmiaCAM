@@ -46,7 +46,7 @@ def oneVid(filename, jsonDir, outDir):
             print("End of video.")
             break
         
-        gray = cv2.cvtColor(raw, cv2.COLOR_BGR2GRAY)
+        gray = raw[:,:,2] #red
 
         fgMask = backSub.apply(gray)
         opening = cv2.morphologyEx(fgMask, cv2.MORPH_OPEN, kernel)
@@ -93,7 +93,7 @@ def nestEdge(resultDir):
 
 JSONfolder = '/Volumes/crall2/Crall_Lab/osmia_2025/nestROIs' #Change me as needed, but if you change the folder structure be prepared to go on an adventure.
 vidDir = '/Volumes/crall2/Crall_Lab/osmia_2025/oCAM_subset_test/Osmia_cameras/*'
-outMainDir = '/Volumes/crall2/Crall_Lab/osmia_2025/Results_nest_23122025'
+outMainDir = '/Volumes/crall2/Crall_Lab/osmia_2025/Results_nestred_26122025'
 
 for folder in glob.glob(vidDir): #Change the folder structure if (and only if) you want to try string manipulation. It'll be fun, or maybe not but hey, YOLO
     if os.path.isdir(folder):

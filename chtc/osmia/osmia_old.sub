@@ -1,12 +1,18 @@
 # Python build file
 
-container_image = docker://user/repo:tag
-universe = container
+container_image = osdf:///chtc/staging/ttang53/osmia.sif
 
 # If building on CentOS 8 (Recommended)
-transfer_input_files = http://proxy.chtc.wisc.edu/SQUID/chtc/el8/python3.tar.gz, http://proxy.chtc.wisc.edu/SQUID/ttang53/tracpaths.tar.gz, http://proxy.chtc.wisc.edu/SQUID/ttang53/wranglePrep2.tar.gz
+
+##change me!!!
+transfer_input_files = pelican://chtc.wisc.edu/researchdrive/<PI Netid>/CHTC/inputfile1.txt
+##
+##change me!!!
+transfer_output_remaps = "outputfile1.txt = pelican://chtc.wisc.edu/researchdrive/<PI NetID>/CHTC/outputfile1.txt; outputfile2.txt = osdf:///chtc/staging/<NetID>/outputfile2.txt"
+##
+
 # Indicate which version of Linux (CentOS) you want to build your packages on
-requirements = (OpSysMajorVer =?= 8) && (HasCHTCStaging == true)
+requirements = (HasCHTCStaging == true)
 request_cpus = 1
 request_memory = 32GB
 request_disk = 64GB
@@ -16,8 +22,8 @@ request_disk = 64GB
 #  which is where HTCondor will describe what steps it takes to run 
 #  your job. Wherever you see $(Cluster), HTCondor will insert the 
 #  queue number assigned to this set of jobs at the time of submission.
-log = osmiaCam_$(Cluster).log
 
+log = osmiaCam_$(Cluster).log
 
 arguments = $(filename)
 shell = run.sh $(filename)

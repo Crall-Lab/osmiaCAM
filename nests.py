@@ -11,7 +11,7 @@ outDir = '/Volumes/crall2/Crall_Lab/osmia_2025/Manuscript/nestOut'
 jsonDir = '/Volumes/crall2/Crall_Lab/osmia_2025/Manuscript/nestROI'
 
 for dir in glob.glob('/Volumes/crall2/Crall_Lab/osmia_2025/Manuscript/nestResults/*'):
-    dir = '/Volumes/crall2/Crall_Lab/osmia_2025/Manuscript/nestResults/osmia4_2025-03-27_07-12-02_nest0'
+    #dir = '/Volumes/crall2/Crall_Lab/osmia_2025/Manuscript/nestResults/osmia4_2025-03-27_07-12-02_nest0'
     jName = os.path.join(jsonDir, os.path.basename(dir)+'.json')
     labels = json.load(open(jName))
     nests = labels['shapes']
@@ -35,6 +35,9 @@ for dir in glob.glob('/Volumes/crall2/Crall_Lab/osmia_2025/Manuscript/nestResult
         df['time'] = time + pd.to_timedelta(df['frame']*(1/15),unit='s')#15Hz
     else:
         print('No bees found:(')
+    
+    print(df)
+    break
 
     #plot all time max
     #NUM_COLORS = len(set(df['nestLabel']))
@@ -64,11 +67,20 @@ for dir in glob.glob('/Volumes/crall2/Crall_Lab/osmia_2025/Manuscript/nestResult
                 continue
             else:
                 first = np.where(byTime['max']==y)[0].max()
-                frame = cv2.imread(byTime['filename'][first].replace('h264', 'jpg'))
+                fname = byTime['filename'][first]
+                print(fname)
+
+                if 'h264' in fname:
+                    frame = cv2.imread(fname.replace('h264', 'jpg'))
+                    outname = os.path.basename(byTime['filename'][first]).replace('h264', 'jpg')
+                else:
+                    cap = cv2.VideoCapture(fname)
+                    ret, frame = cap.read()
+                    outname = os.path.basename(byTime['filename'][first]).replace('mjpeg', 'jpg')
                 
                 cv2.line(frame,(int(x1),y),(int(x2),y),(255,255,0),3)
                 
-                cv2.imwrite(os.path.join(os.path.join(outDir, str(n)), os.path.basename(byTime['filename'][first].replace('h264', 'jpg'))), frame)
+                cv2.imwrite(os.path.join(outDir, str(n), outname), frame)
                     
                 
         #ax.scatter(byTime['time'], byTime['max'], alpha=0.5, color=colours[c])

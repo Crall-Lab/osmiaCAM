@@ -1,46 +1,60 @@
 #!/usr/bin/env python3
 """
-Preview script for the nest camera that matches dayShift0 framing.
-It enables the relay-controlled light during preview, then turns it off on exit.
+Two-stage preview script for the nest camera used by dayShift0.py.
+1) Full-frame fullscreen preview (lights off) until user continues.
+2) Center 200x200 focus preview (lights on) until user exits.
 """
 
 import argparse
-import sys
+import subprocess
 import time
 
 import gpiod
-import cv2
-from picamera2 import Picamera2
 
-CAMERA_ID = 0
+CAMERA_ID = "0"
 FRAME_WIDTH = 4056
 FRAME_HEIGHT = 1400
-FOCUS_BOX = 200
+FOCUS_SIZE = 200
 GPIO_CHIP = "gpiochip4"
 RELAY_PIN = 18
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="Preview nest camera with same crop/framing as dayShift0."
+        description=(
+            "Run fullscreen full-frame preview, then center-focus preview "
+            "with lights on."
+        )
     )
     parser.add_argument(
         "--camera",
-        type=int,
+        type=str,
         default=CAMERA_ID,
         help="Camera ID (default: 0).",
     )
     parser.add_argument(
-        "--scale",
-        type=float,
-        default=0.4,
-        help="Display scale for the full preview window.",
+        "--width",
+        type=int,
+        default=FRAME_WIDTH,
+        help=f"Full preview width (default: {FRAME_WIDTH}).",
+    )
+    parser.add_argument(
+        "--height",
+        type=int,
+        default=FRAME_HEIGHT,
+        help=f"Full preview height (default: {FRAME_HEIGHT}).",
     )
     parser.add_argument(
         "--focus-size",
         type=int,
-        default=FOCUS_BOX,
+        default=FOCUS_SIZE,
         help="Center focus window size in pixels (default: 200).",
+    )
+    parser.add_argument(
+        "--warmup-seconds",
+        type=float,
+        default=1.0,
+        help="Seconds to wait after turning lights on for focus stage.",
     )
     return parser.parse_args()
 
@@ -59,70 +73,86 @@ def cleanup_light(chip, light_line):
         chip.close()
 
 
+def center_roi(width: int, height: int, box: int) -> str:
+    box = max(10, min(box, width, height))
+    roi_w = box / float(width)
+    roi_h = box / float(height)
+    roi_x = (1.0 - roi_w) / 2.0
+    roi_y = (1.0 - roi_h) / 2.0
+    return f"{roi_x:.6f},{roi_y:.6f},{roi_w:.6f},{roi_h:.6f}"
+
+
+def stop_preview(proc: subprocess.Popen) -> None:
+    if proc.poll() is not None:
+        return
+    proc.terminate()
+    try:
+        proc.wait(timeout=3)
+    except subprocess.TimeoutExpired:
+        proc.kill()
+        proc.wait(timeout=3)
+
+
+def run_until_enter(command, prompt: str) -> None:
+    proc = subprocess.Popen(command)
+    try:
+        input(prompt)
+    finally:
+        stop_preview(proc)
+
+
 def main() -> None:
     args = parse_args()
     chip, light_line = setup_light_line()
-    picam2 = None
 
     try:
-        light_line.set_value(0)
-        time.sleep(1)
+        # Relay is active-low in this project: 0=on, 1=off.
+        light_line.set_value(1)
 
-        picam2 = Picamera2(args.camera)
-        preview_config = picam2.create_preview_configuration(
-            main={"size": (FRAME_WIDTH, FRAME_HEIGHT), "format": "RGB888"}
+        full_preview_cmd = [
+            "rpicam-hello",
+            "--camera",
+            str(args.camera),
+            "--width",
+            str(args.width),
+            "--height",
+            str(args.height),
+            "--fullscreen",
+            "-t",
+            "0",
+        ]
+
+        run_until_enter(
+            full_preview_cmd,
+            "Step 1: Fullscreen preview running. Press Enter to switch to focus view...",
         )
-        picam2.configure(preview_config)
-        picam2.start()
 
-        cv2.namedWindow("Nest Preview", cv2.WINDOW_NORMAL)
-        cv2.namedWindow("Center Focus", cv2.WINDOW_NORMAL)
+        light_line.set_value(0)
+        time.sleep(max(0.0, args.warmup_seconds))
 
-        while True:
-            frame_rgb = picam2.capture_array()
-            frame = cv2.cvtColor(frame_rgb, cv2.COLOR_RGB2BGR)
+        roi = center_roi(args.width, args.height, args.focus_size)
+        focus_preview_cmd = [
+            "rpicam-hello",
+            "--camera",
+            str(args.camera),
+            "--width",
+            str(args.focus_size),
+            "--height",
+            str(args.focus_size),
+            "--roi",
+            roi,
+            "-t",
+            "0",
+        ]
 
-            h, w = frame.shape[:2]
-            box = max(10, args.focus_size)
-            half = box // 2
-            cx, cy = w // 2, h // 2
-            x0, y0 = cx - half, cy - half
-            x1, y1 = x0 + box, y0 + box
-
-            # Keep the focus box fully inside frame bounds.
-            x0 = max(0, min(x0, w - box))
-            y0 = max(0, min(y0, h - box))
-            x1, y1 = x0 + box, y0 + box
-
-            focus_crop = frame[y0:y1, x0:x1]
-
-            cv2.rectangle(frame, (x0, y0), (x1, y1), (0, 255, 255), 3)
-            if args.scale != 1.0:
-                frame = cv2.resize(
-                    frame,
-                    (int(w * args.scale), int(h * args.scale)),
-                    interpolation=cv2.INTER_AREA,
-                )
-
-            cv2.imshow("Nest Preview", frame)
-            cv2.imshow("Center Focus", focus_crop)
-
-            key = cv2.waitKey(1) & 0xFF
-            if key == ord("q") or key == 27:
-                break
+        run_until_enter(
+            focus_preview_cmd,
+            "Step 2: Center 200x200 focus preview running. Press Enter to exit...",
+        )
     finally:
-        if picam2 is not None:
-            picam2.stop()
-        cv2.destroyAllWindows()
         light_line.set_value(1)
         cleanup_light(chip, light_line)
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        pass
-    except Exception as exc:
-        print(f"Preview failed: {exc}", file=sys.stderr)
-        raise
+    main()

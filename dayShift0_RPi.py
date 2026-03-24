@@ -6,8 +6,10 @@ import numpy as np
 import os
 from datetime import datetime
 import time
-import gpiod
+import RPi.GPIO as GPIO
 import subprocess
+
+GPIO.setmode(GPIO.BOARD) #GPIO.setmode(GPIO.BCM)
 
 start_t = 7
 end_t = 19
@@ -28,13 +30,11 @@ if start_t <= int(datetime.now().strftime('%H')) <= end_t:
         os.mkdir(outDir)
 
     # Set up relay pin to control lights
-    relayPin = 'PIN_18'
-    chip = gpiod.Chip('/dev/gpiochip4')
-    light_line = chip.find_line(relayPin)
-    light_line.request(consumer='LED', type=gpiod.LINE_REQ_DIR_OUT)
+    relayPin = 18
+    GPIO.setup(relayPin, GPIO.out)
 
     # Turn on lights
-    light_line.set_value(0)
+    GPIO.output(relayPin, 0)
     time.sleep(1)
 
     now = datetime.now()
@@ -59,4 +59,4 @@ if start_t <= int(datetime.now().strftime('%H')) <= end_t:
     print(f"First frame saved: {image_path}")
 
     time.sleep(12)
-    light_line.set_value(1)  # Turn off lights
+    GPIO.output(relayPin, 1)  # Turn off lights

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1440 864">
+  <!-- Generator: Adobe Illustrator 30.4.0, SVG Export Plug-In . SVG Version: 2.1.4 Build 226)  -->
+  <defs>
+    <style>
+      .st0 {
+        stroke-width: .83px;
+      }
+
+      .st0, .st1, .st2, .st3 {
+        fill: none;
+        stroke: #231f20;
+        stroke-miterlimit: 10;
+      }
+
+      .st1 {
+        stroke-width: 1.23px;
+      }
+
+      .st3 {
+        stroke-width: .62px;
+      }
+    </style>
+  </defs>
+  <rect class="st3" x="870.48" y="355.5" width="27" height="153" transform="translate(451.9797 1315.9797) rotate(-90)"/>
+  <rect class="st3" x="181.48" y="355" width="27" height="153" transform="translate(626.48 236.52) rotate(90)"/>
+  <rect class="st3" x="1354.5" y="531" width="27" height="153"/>
+  <rect class="st3" x="1390.5" y="531" width="27" height="153"/>
+  <rect class="st3" x="1354.5" y="702" width="27" height="153"/>
+  <rect class="st3" x="1390.5" y="702" width="27" height="153"/>
+  <g>
+    <polygon class="st2" points="1324.5 846 1324.5 450 1252.27 450 1252.5 441 1216.5 441 1216.5 450 676.5 450 676.5 441 640.5 441 640.5 450 532.5 450 532.5 441 496.5 441 496.5 450 9.89 450 9.89 846 496.5 846 496.5 855 532.5 855 532.5 846 640.5 846 640.5 855 676.5 855 676.5 846 1216.5 846 1216.5 855 1252.5 855 1252.5 846 1324.5 846"/>
+    <rect class="st0" x="269.86" y="702" width="29.12" height="72"/>
+    <rect class="st0" x="269.86" y="522" width="29.12" height="72"/>
+    <rect class="st1" x="9.89" y="540" width="252" height="216" transform="translate(-512.11 783.89) rotate(-90)"/>
+  </g>
+  <g>
+    <polygon class="st2" points="1325.12 414 1325.12 18 1252.88 18 1253.12 9 1217.12 9 1217.12 18 677.12 18 677.12 9 641.12 9 641.12 18 533.12 18 533.12 9 497.12 9 497.12 18 10.5 18 10.5 414 497.12 414 497.12 423 533.12 423 533.12 414 641.12 414 641.12 423 677.12 423 677.12 414 1217.12 414 1217.12 423 1253.12 423 1253.12 414 1325.12 414"/>
+    <rect class="st0" x="270.48" y="270" width="29.12" height="72"/>
+    <rect class="st0" x="270.48" y="90" width="29.12" height="72"/>
+    <rect class="st1" x="10.5" y="108" width="252" height="216" transform="translate(-79.5 352.5) rotate(-90)"/>
+  </g>
+  <polygon class="st2" points="1417.5 66.4 1417.5 57.4 1399.5 57.4 1399.5 66.4 1363.5 66.4 1363.5 57.4 1345.5 57.4 1345.5 66.4 1363.5 138.4 1363.5 390.4 1345.5 462.4 1345.5 471.4 1363.5 471.4 1363.5 462.4 1399.5 462.4 1399.5 471.4 1417.5 471.4 1417.5 462.4 1399.5 390.4 1399.5 138.4 1417.5 66.4"/>
+</svg>

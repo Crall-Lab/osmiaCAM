@@ -73,6 +73,10 @@ This guide uses a raspberry pi 5, and the 64-bit OS.
 ## Change device ID
 Go to Raspberry Pi COnfiguration and provide a unique username when prompted. *NB user names should be labeled in a repeatable way (e.g., 'osmia1', 'osmia2') to easily associated with physical units. The user name will be saved in output files.
 
+## Turn off Admin Password (Raspberry Pi OS 6.2 onwards)
+This option can be accessed as follows:
+`Preferences —> Control Centre —> System —> Admin Password`
+
 ## Pi Connect
 Click this:
 ![button in menu](guideImages/piConnect.jpg)
